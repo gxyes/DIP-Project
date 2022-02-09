@@ -1,23 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { React } from 'react';
-// import { 
-//   StyleSheet, 
-//   Text, 
-//   View , 
-//   SafeAreaView, 
-//   TouchableOpacity
-// } from 'react-native';
-import { StyleSheet, Text, View, Button, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { React, useState } from 'react';
+import { StyleSheet, Text, View, Button, Dimensions, Platform, TouchableWithoutFeedback } from 'react-native';
 import Modal from "react-native-modalbox";
 import { BottomSheet, ListItem } from 'react-native-elements';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ChooseCategoryOverlay from './Overlays/ChooseCategoryOverlay';
 import { ScrollView } from 'react-native-gesture-handler';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const {width, height } = Dimensions.get("window");
 
 export default function App() {
+  // for choose category && reminders (gwenn 220209)
   const categoryList = ["Category1", "Category2", "Category3"];
   const reminderList = ["No Reminder",
 "At time of event",
@@ -100,18 +94,67 @@ export default function App() {
       </Modal>
     );
 };
+  // for date and time picker (jichen 220209)
+  const [date,setDate]= useState(new Date());
+  const [mode,setMode]= useState('date');
+  const [show,setShow]= useState(false);
+  const [text,setText]= useState('Empty');
+
+  const onChange = (event, selectedDate)=> {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+    let fDate = tempDate.getDate()+'/'+(tempDate.getMonth()+1)+'/'+tempDate.getFullYear();
+    let fTime = "Hours:" + tempDate.getHours() + '| Minutes' + tempDate.getMinutes();
+    setText(fDate+'\n'+fTime)
+
+    console.log(fDate+"("+fTime+")")
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
 
   return (
-      <View style={styles.container}>
-        
-        <Button title="Choose Category!" onPress={() => setModalCategoryVisible(true)} />
-        {getModalCategory()}
-        <Text>Category: {category}</Text>
-        <Button title="Choose Reminder!" onPress={() => setModalReminderVisible(true)} />
-        <Text>Reminder: {reminder}</Text>
-        {getModalReminder()}
-      </View>
+    //date time picker
+      <View style={styles.containerDate}>
+        <Text>{text}</Text>
 
+        <View style={{margin:20}}>
+          <Button title="Date Picker" onPress={() => showMode('date')} />
+        </View>
+
+        <View style={{margin:20}}>
+        <Button title="Time Picker" onPress={()=> showMode('time')}/>
+        </View>
+
+        {show && (
+          <DateTimePicker
+          testID='dateTimePicker'
+          value={date}
+          mode = {mode}
+          is24Hour = {true}
+          display='default'
+          onChange={onChange}
+          />
+        )}
+        <StatusBar style='auto'/>
+
+        {/* Choose reminder and category */}
+        <View>
+          
+          <Button title="Choose Category!" onPress={() => setModalCategoryVisible(true)} />
+          {getModalCategory()}
+          <Text>Category: {category}</Text>
+          <Button title="Choose Reminder!" onPress={() => setModalReminderVisible(true)} />
+          <Text>Reminder: {reminder}</Text>
+          {getModalReminder()}
+        </View>
+      </View>
 
   );
 }
@@ -126,14 +169,14 @@ const styles = StyleSheet.create({
   modalBox: {
     overflow: "hidden",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-end",
     flex: 1,
     height,
     width,
     backgroundColor: "transparent"
   },
   modalScroll:{
-    marginTop: 300,
+    // marginTop: 300,
     overflow: "hidden",
     flex: 1,
     height,
@@ -154,62 +197,15 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: 22
+  },
+  containerDate: {
+    flex: 1,
+    backgroundColor: '#e2e2e2',
+    justifyContent: 'center'
+  },
+  posttext:{
+    textAlign:'center'
   }
 });
 
-  
-//   const renderContent = () => (
-//     <View
-//       style={{
-//         backgroundColor: 'white',
-//         padding: 16,
-//         height: 450,
-//       }}
-//     >
-//       <Text>Swipe down to close</Text>
-//     </View>
-//   );
-
-//   const sheetRef = React.useRef(null);
-
-//   return (
-//     <>
-//       <View
-//         style={{
-//           flex: 1,
-//           backgroundColor: 'papayawhip',
-//           alignItems: 'center',
-//           justifyContent: 'center',
-//         }}
-//       >
-//         <Button
-//           title="Open Bottom Sheet"
-//           onPress={() => sheetRef.current.snapTo(0)}
-//         />
-//       </View>
-//       <BottomSheet
-//         ref={sheetRef}
-//         snapPoints={[450, 300, 0]}
-//         borderRadius={10}
-//         renderContent={renderContent}
-//       />
-//     </>
-//   );
-// }
-  
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   overlay: {
-//     flex: 1,
-//     width: '100%',
-//     height: '50%',
-//     backgroundColor: '#fff',
-//     alignItems: 'flex-start',
-//     justifyContent: 'flex-end',
-//   },
-// });
+ 
