@@ -35,8 +35,8 @@ const PlusButton = ({children,onPress}) => (
 const Tabs = () => {
     return(
         <Tab.Navigator
-            tabBarOptions={{
-                showLabel: false,
+            screenOptions={{
+                "tabBarShowLabel": false,
             }}
         >
             <Tab.Screen name = "Timetable" component={TimetableScreen} options=
