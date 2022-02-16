@@ -1,20 +1,17 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { Spacer, Center, NativeBaseProvider} from "native-base";
-import DeadlineCard from '../components/DeadlineCard';
-import TaskCard from '../components/TaskCard';
-import EventCard from '../components/EventCard';
 import TimeTableContainer from '../components/TimeTableContainer';
 import TodoContainer from '../components/TodoContainer';
 import TodayContainer from '../components/TodayContainer';
+import TopBar from '../navigation/TopBar';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 const TimetableScreen = ({navigation}) => {
     return (
-        <View style={styles.container}>
-          <NativeBaseProvider>
-            <TodoContainer/>
-          </NativeBaseProvider>
-        </View>   
+      <TopBar/>
     );
 };
 
