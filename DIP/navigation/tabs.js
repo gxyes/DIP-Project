@@ -37,6 +37,7 @@ const Tabs = () => {
         <Tab.Navigator
             screenOptions={{
                 "tabBarShowLabel": false,
+                headerShown: false,
             }}
         >
             <Tab.Screen name = "Timetable" component={TimetableScreen} options=
