@@ -9,11 +9,8 @@ import AddCategory from './AddCategory';
 const App = () => {
   return(
       // <NavigationContainer independent={true}>
-      <NavigationContainer >
-
-        {/* <Tabs/> */}
-        <AddCategory/>
-
+      <NavigationContainer >  
+        <Tabs/>
       </NavigationContainer>
   )
 }
