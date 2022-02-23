@@ -24,6 +24,7 @@
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
     "react-native-calendar-timetable": "^0.4.2",
+    "react-native-modalbox": "1.7.1",
     "react-native-pager-view": "5.4.9",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
