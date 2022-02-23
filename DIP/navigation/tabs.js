@@ -12,7 +12,7 @@ const Tab = createBottomTabNavigator();
 const PlusButton = ({children,onPress}) => (
     <TouchableOpacity
         style={{
-            top: 0,
+            top: -20,
             justifyContent:'center',
             alignItems:'center',
 
