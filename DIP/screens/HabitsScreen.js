@@ -1,11 +1,14 @@
 import * as React from 'react'
-import { ScrollView, Text, Button, TextInput, StyleSheet } from 'react-native'
+import { ScrollView, Text, Button, TextInput, StyleSheet, LogBox  } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 
 //Required imports for database
 import {useState, useEffect} from "react";
 import {db} from '../firebase_config';
 import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
+
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+// ignore warning for constantly refreshing view
 
 function HabitsScreen() {
 
