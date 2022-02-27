@@ -1,13 +1,14 @@
 import * as React from 'react'
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native'
+import { ScrollView, Text, Button, TextInput, StyleSheet } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 
 //Required imports for database
 import {useState, useEffect} from "react";
 import {db} from '../firebase_config';
-import {collection, getDocs, addDoc, doc, deleteDoc, updateDoc} from 'firebase/firestore';
+import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
 
 function HabitsScreen() {
+
     const [newTaskID, setNewTaskID] = useState(0)
     const [newCategory, setNewCategory] = useState("")
     const [newLocation, setNewLocation] = useState("")
@@ -49,78 +50,70 @@ function HabitsScreen() {
       };
   
       getTasks();
-    },[]);
+    },[tasks]);
   
     return (
-      <View className="HabitsScreen">
+      <ScrollView>
 
         <TextInput
             style={styles.Input}
-            onChange={(event) => {
-                setNewName(event.target.value)
-            }}
+            onChangeText={setNewName}
+            value={newName}
             placeholder="Task"
+            
         />
         <TextInput
             style={styles.Input}
-            onChange={(event) => {
-                setNewCategory(event.target.value)
-            }}
+            onChangeText={setNewCategory}
+            value={newCategory}
             placeholder="Category"
         />
         <TextInput
             style={styles.Input}
-            onChange={(event) => {
-                setNewLocation(event.target.value)
-            }}
+            onChangeText={setNewLocation}
+            value={newLocation}
             placeholder="Location"
         />
         <TextInput
             style={styles.Input}
-            onChange={(event) => {
-                setNewRemarks(event.target.value)
-            }}
+            onChangeText={setNewRemarks}
+            value={newRemarks}
             placeholder="Remarks"
         />
         <TextInput
             style={styles.Input}
-            onChange={(event) => {
-                setNewReminder(event.target.value)
-            }}
+            onChangeText={setNewReminder}
+            value={newReminder}
             placeholder="Reminder"
         />
         <TextInput
             style={styles.Input}
-            onChange={(event) => {
-                setNewDate(event.target.value)
-            }}
+            onChangeText={setNewDate}
+            value={newDate}
             placeholder="Date"
         />
         <TextInput
             style={styles.Input}
-            onChange={(event) => {
-                setNewEndTime(event.target.value)
-            }}
+            onChangeText={setNewEndTime}
+            value={newEndTime}
             placeholder="EndTime"
         />
         <TextInput
             style={styles.Input}
-            onChange={(event) => {
-                setNewStartTime(event.target.value)
-            }}
+            onChangeText={setNewStartTime}
+            value={newStartTime}
             placeholder="StartTime"
         />
         <TextInput
             style={styles.Input}
-            onChange={(event) => {
-                setNewTaskID(event.target.value)
-            }}
+            onChangeText={setNewTaskID}
+            value={newTaskID}
             placeholder="New Task ID"
         />
     
         
         <Button
-            onPress={() => createTask}
+            onPress={createTask}
             title= "Add Task"
             >
         </Button>
@@ -148,7 +141,7 @@ function HabitsScreen() {
             </NavigationContainer>
           );
         })}
-      </View>
+      </ScrollView>
     );
   }
   
