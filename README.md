@@ -14,7 +14,7 @@ After you download the file, please run **yarn install** first, this will let yo
 | ---- | ---- | ---- | ---- |
 | NativeBase | https://nativebase.io/ | EventCard.js, TaskCard.js, DeadlineCard.js | yarn add native-base<br>expo install react-native-svg<br>expo install react-native-safe-area-context|
 | Streamline | https://app.streamlinehq.com/icons/streamline-colors |  |
-|  |  |  |
+| Firebase | https://firebase.google.com/ | Database | npm install firebase
 |  |  |  |
 |  |  |  |
 |  |  |  |
