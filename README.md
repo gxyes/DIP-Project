@@ -14,7 +14,7 @@ After you download the file, please run **yarn install** first, this will let yo
 | ---- | ---- | ---- | ---- |
 | NativeBase | https://nativebase.io/ | EventCard.js, TaskCard.js, DeadlineCard.js | yarn add native-base<br>expo install react-native-svg<br>expo install react-native-safe-area-context|
 | Streamline | https://app.streamlinehq.com/icons/streamline-colors |  |
-| Firebase | https://firebase.google.com/ | Database | npm install firebase
+| Firebase | https://firebase.google.com/ | Database | npm install firebase (To Fix yellow error: Go to node_modules/react-native/Libraries/Core/Timer/JSTimers.js, Look for the variable MAX_TIMER_DURATION_MS,  Change 60 * 1000 to 10000 * 1000)
 |  |  |  |
 |  |  |  |
 |  |  |  |
