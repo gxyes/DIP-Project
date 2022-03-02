@@ -15,83 +15,93 @@ import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
 // ignore warning for constantly refreshing view
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
-const AddCategory = () => {
-  const [name, onChangeName] = React.useState(null);
-  const [AddInfo, onChangeInfo] = React.useState(null);
+import AddEvent from './AddEvent';
+import AddDeadline from './AddDeadline';
+import AddTask from './AddTask';
+import AddCategory from './AddCategory';
+
+function AddComponents( {navigation} ) {
 
   return (
+
     <SafeAreaView>
-      <View>
+      {/* <View>
         <Text
           style={styles.Title}>
-          Category Info
+          Adding Components
         </Text>
-      </View>
+      </View> */}
       <View style={styles.HeaderBorder}/>
 
       {/* content */}
-      <Text
-        style={styles.Heading}>
-        Name:
-      </Text>
-      <TextInput
-        style={styles.Input}
-        onChangeText={onChangeName}
-        value={name}
-        placeholder="e.g. Work / Study"
-        keyboardType="default"
-      />
-      <Text
-        style={styles.Heading}>
-        Additional Info:
-      </Text>
-      <TextInput
-        style={styles.Input}
-        onChangeText={onChangeInfo}
-        value={AddInfo}
-        placeholder="e.g. Special arrangements, people"
-        keyboardType="default"
-      />
 
-      <TouchableOpacity style={styles.saveButton}>
-        <Text style={styles.saveButtonText}>Save</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Add Category")}>
+        <Text style={styles.AddPagesHeader}>+ Add Category</Text>
       </TouchableOpacity>
+      <View style={styles.AddPagesBorder}/>
+
+      <TouchableOpacity onPress={() => navigation.navigate("Add Event")}>
+        <Text style={styles.AddPagesHeader}>+ Add Event</Text>
+      </TouchableOpacity>
+      {/* <Text
+        style={styles.Description}>
+        No Event
+      </Text> */}
+      <View style={styles.AddPagesBorder}/>
+
+      <TouchableOpacity onPress={() => navigation.navigate("Add Deadline")}>
+        <Text style={styles.AddPagesHeader}>+ Add Deadline</Text>
+      </TouchableOpacity>
+      {/* <Button onPress={() => navigation.navigate("Add Deadline")} title="Add Deadline" /> */}
+      <View style={styles.AddPagesBorder}/>
+
+      <TouchableOpacity onPress={() => navigation.navigate("Add Task")}>
+        <Text style={styles.AddPagesHeader}>+ Add Task</Text>
+      </TouchableOpacity>
+      <View style={styles.AddPagesBorder}/>
 
     </SafeAreaView>
   );
 };
 
-// function AddEventScreen() {
-//   return (
-//     <AddEvent/>
-//   )
-// }
+function AddEventScreen() {
+  return (
+    <AddEvent/>
+  )
+}
 
-// function AddDeadlineScreen() {
-//   return (
-//     <AddDeadline/>
-//   )
-// }
+function AddDeadlineScreen() {
+  return (
+    <AddDeadline/>
+  )
+}
 
-// function AddTaskScreen() {
-//   return (
-//     <AddTask/>
-//   )
-// }
+function AddTaskScreen() {
+  return (
+    <AddTask/>
+  )
+}
 
-// const Stack = createStackNavigator()
+function AddCategoryScreen() {
+  return (
+    <AddComponents/>
+  )
+}
 
-// export default function CategoryStack() {
+const Stack = createStackNavigator()
 
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Add Category" component={AddCategory} />
-//       <Stack.Screen name="Add Event" component={AddEventScreen} />
-//       <Stack.Screen name="Add Deadline" component={AddDeadlineScreen} />
-//       <Stack.Screen name="Add Task" component={AddTaskScreen} />
-//     </Stack.Navigator>
-//   )
-// };
+export default function ComponentStack() {
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Add Components" component={AddComponents} />
+      <Stack.Screen name="Add Category" component={AddCategory} />
+      <Stack.Screen name="Add Event" component={AddEventScreen} />
+      <Stack.Screen name="Add Deadline" component={AddDeadlineScreen} />
+      <Stack.Screen name="Add Task" component={AddTaskScreen} />
+    </Stack.Navigator>
+  )
+};
 
 
 const styles = StyleSheet.create({
@@ -207,7 +217,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     //fontWeight: "bold",
     padding: 10,
-  },
+  }
 });
 
-export default AddCategory;
