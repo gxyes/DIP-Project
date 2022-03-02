@@ -51,8 +51,11 @@ function HabitsScreen() {
         const data = await getDocs(tasksCollectionRef);
         setTasks(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       };
-  
-      getTasks();
+      setInterval(() => {
+        getTasks();
+        console.log(getTasks);
+      }, 1800)
+      
     },[]);
   
     return (
