@@ -1,25 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
 import React from "react";
 import { useState } from 'react';
-import { TouchableOpacity, SafeAreaView, ScrollView, StyleSheet, TextInput, Text, View, Button,
-   Dimensions, Image, Platform, LogBox } from "react-native";
+import { SafeAreaView, StyleSheet, TextInput, Text, View, Button, Dimensions, Image, TouchableOpacity } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import Modal from "react-native-modalbox";import { NavigationContainer } from '@react-navigation/native';
 
-//Required imports for database
-import {useEffect} from "react";
-import {db} from './firebase_config';
-import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
+import Modal from "react-native-modalbox";
 
-// ignore warning for constantly refreshing view
-LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+import AddEvent from './AddEvent';
+import AddDeadline from './AddDeadline';
+import AddTask from './AddTask';
 
-const AddCategory = () => {
+function AddCategory( {navigation} ) {
   const [name, onChangeName] = React.useState(null);
   const [AddInfo, onChangeInfo] = React.useState(null);
 
   return (
+
     <SafeAreaView>
       <View>
         <Text
@@ -53,6 +48,27 @@ const AddCategory = () => {
         keyboardType="default"
       />
 
+      <TouchableOpacity onPress={() => navigation.navigate("Add Event")}>
+        <Text style={styles.AddPagesHeader}>+ Add Event</Text>
+      </TouchableOpacity>
+      {/* <Text
+        style={styles.Description}>
+        No Event
+      </Text> */}
+      <View style={styles.AddPagesBorder}/>
+
+
+      <TouchableOpacity onPress={() => navigation.navigate("Add Deadline")}>
+        <Text style={styles.AddPagesHeader}>+ Add Deadline</Text>
+      </TouchableOpacity>
+      {/* <Button onPress={() => navigation.navigate("Add Deadline")} title="Add Deadline" /> */}
+      <View style={styles.AddPagesBorder}/>
+
+      <TouchableOpacity onPress={() => navigation.navigate("Add Task")}>
+        <Text style={styles.AddPagesHeader}>+ Add Task</Text>
+      </TouchableOpacity>
+      <View style={styles.AddPagesBorder}/>
+
       <TouchableOpacity style={styles.saveButton}>
         <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity>
@@ -61,37 +77,37 @@ const AddCategory = () => {
   );
 };
 
-// function AddEventScreen() {
-//   return (
-//     <AddEvent/>
-//   )
-// }
+function AddEventScreen() {
+  return (
+    <AddEvent/>
+  )
+}
 
-// function AddDeadlineScreen() {
-//   return (
-//     <AddDeadline/>
-//   )
-// }
+function AddDeadlineScreen() {
+  return (
+    <AddDeadline/>
+  )
+}
 
-// function AddTaskScreen() {
-//   return (
-//     <AddTask/>
-//   )
-// }
+function AddTaskScreen() {
+  return (
+    <AddTask/>
+  )
+}
 
-// const Stack = createStackNavigator()
+const Stack = createStackNavigator()
 
-// export default function CategoryStack() {
+export default function CategoryStack() {
 
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Add Category" component={AddCategory} />
-//       <Stack.Screen name="Add Event" component={AddEventScreen} />
-//       <Stack.Screen name="Add Deadline" component={AddDeadlineScreen} />
-//       <Stack.Screen name="Add Task" component={AddTaskScreen} />
-//     </Stack.Navigator>
-//   )
-// };
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Add Category" component={AddCategory} />
+      <Stack.Screen name="Add Event" component={AddEventScreen} />
+      <Stack.Screen name="Add Deadline" component={AddDeadlineScreen} />
+      <Stack.Screen name="Add Task" component={AddTaskScreen} />
+    </Stack.Navigator>
+  )
+};
 
 
 const styles = StyleSheet.create({
@@ -207,7 +223,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     //fontWeight: "bold",
     padding: 10,
-  },
+  }
 });
 
-export default AddCategory;

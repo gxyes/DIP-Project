@@ -124,7 +124,7 @@ const AddEvent = () => {
     {timeType == 'Start' ? setTimeStart(fTime) : null};
     {timeType == 'End' ? setTimeEnd(fTime) : null};
 
-    // console.log(fDate+"("+fTime+")"+"("+sTime+")")
+    console.log(fDate+"("+fTime+")"+"("+sTime+")")
   };
 
 

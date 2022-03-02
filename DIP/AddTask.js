@@ -2,43 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import React from "react";
 import { useState } from 'react';
 import { TouchableOpacity, SafeAreaView, ScrollView, StyleSheet, TextInput, Text, View, Button,
-   Dimensions, Image, Platform, LogBox } from "react-native";
+   Dimensions, Image, Platform } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Modal from "react-native-modalbox";import { NavigationContainer } from '@react-navigation/native';
 
-//Required imports for database
-import {useEffect} from "react";
-import {db} from './firebase_config';
-import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
-
-// ignore warning for constantly refreshing view
-LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+import Modal from "react-native-modalbox";
 
 const AddTask = () => {
   // base const
-  const [newName, setNewName] = useState("");
-  const [newLocation, setNewLocation] = useState("");
-  const [newRemarks, setNewRemarks] = useState("");
-  const [newCategory, setNewCategory] = useState("");
-  const [newReminder, setNewReminder] = useState("");
-  
-  // const [category, setCategory] = useState("");
-  // const [reminder, setReminder] = useState("");
-
-  // additional firebase stuff
-  const [tasks, setTasks] = useState([]);
-  const tasksCollectionRef = collection(db, "Task");
-
-  // datetimepicker const
-  const [mode,setMode]= useState('newDate');
-  const [show,setShow]= useState(false);
-  const [newDate, setNewDate]= useState(new Date(Date.now()));
-  const [dateText,setDateText]= useState('Select Date');
-  const [newStartTime, setNewStartTime] = useState("Start Time")
-  const [newEndTime, setNewEndTime] = useState("Start Time")
-  const [timeType, setTimeType] = useState('');
-  const [dateType, setDateType] = useState('');
+  const [name, onChangeName] = React.useState(null);
+  const [Location, onChangeLocation] = React.useState(null);
+  const [Remarks, onChangeRemarks] = React.useState(null);
 
   // category/reminder const & declaration
   const categoryList = ["Category1", "Category2", "Category3"];
@@ -59,15 +33,17 @@ const AddTask = () => {
   ]
   const [modalCategoryVisible, setModalCategoryVisible] = useState(false);
   const [modalReminderVisible, setModalReminderVisible] = useState(false);
+  const [category, setCategory] = useState("");
+  const [reminder, setReminder] = useState("");
 
   let ListCategory=categoryList.map((item,index)=>{
-    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setNewCategory(item);setModalCategoryVisible(false); console.log({item})}}> 
+    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setCategory(item);setModalCategoryVisible(false); console.log({item})}}> 
         <Text style={{ fontSize: 14 }}>{item}</Text>
   </TouchableOpacity>
   })
 
   let ListReminders=reminderList.map((item,index)=>{
-    return <TouchableOpacity style={styles.buttonStyle} onPress={() => {setNewReminder(item); setModalReminderVisible(false)}}>
+    return <TouchableOpacity style={styles.buttonStyle} onPress={() => {setReminder(item); setModalReminderVisible(false)}}>
         <Image
           source={require('./assets/alarm.png')} style={{width: 15, height: 15}} 
           // style={styles.ImageIconStyle}
@@ -114,60 +90,41 @@ const AddTask = () => {
             </TouchableOpacity> 
           </ScrollView>
         </View>
+          
       </Modal>
     );
   };
+
+  // datetimepicker const
+  const [mode,setMode]= useState('date');
+  const [show,setShow]= useState(false);
+  const [date, setDate]= useState(new Date(Date.now()));
+  const [dateText,setDateText]= useState('Select Date');
+  const [timeStart,setTimeStart]= useState('Start Time');
+  const [timeEnd,setTimeEnd]= useState('End Time');
+  // const [text,setText]= useState('  Empty');
+  const [timeType, setTimeType] = useState('');
+  const [dateType, setDateType] = useState('');
 
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
   };
-
   const onChange = (event, selectedDate)=> {
-    const currentDate = selectedDate || newDate;
+    const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
-    setNewDate(currentDate);
+    setDate(currentDate);
 
     let tempDate = new Date(currentDate);
     let fDate = tempDate.getDate()+'/'+(tempDate.getMonth()+1)+'/'+tempDate.getFullYear();
     let fTime = tempDate.getHours() + ':' + tempDate.getMinutes();
     // setDateText(fDate);
     {timeType == 'Date' ? setDateText(fDate) : null};
-    {timeType == 'Start' ? setNewStartTime(fTime) : null};
-    {timeType == 'End' ? setNewEndTime(fTime) : null};
+    {timeType == 'Start' ? setTimeStart(fTime) : null};
+    {timeType == 'End' ? setTimeEnd(fTime) : null};
 
     console.log(fDate+"("+fTime+")"+"("+sTime+")")
   };
-
-  const createTask = async () => {
-    await addDoc(tasksCollectionRef,
-        {
-            Name: newName, 
-            Category: newCategory,
-            taskID: newTaskID,
-            Location: newLocation,
-            startTime: newStartTime,
-            endTime: newEndTime,
-            date: newDate,
-            Reminder: newReminder,
-            Remarks: newRemarks
-        }
-        );
-  };
-
-  const deleteTask = async (id) =>{
-      const taskDoc = doc(db, "Task", id);
-      await deleteDoc(taskDoc)
-  }
-
-  useEffect(() => {
-    const getTasks = async () => {
-      const data = await getDocs(tasksCollectionRef);
-      setTasks(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-
-    getTasks();
-  },[tasks]);
 
 
   return (
@@ -188,8 +145,8 @@ const AddTask = () => {
         </Text>
         <TextInput
           style={styles.Input}
-          onChangeText={setNewName}
-          value={newName}
+          onChangeText={onChangeName}
+          value={name}
           placeholder="e.g. Work / Study"
           keyboardType="default"
         />
@@ -199,8 +156,8 @@ const AddTask = () => {
         </Text>
         <TextInput
           style={styles.Input}
-          onChangeText={setNewLocation}
-          value={newLocation}
+          onChangeText={onChangeLocation}
+          value={Location}
           placeholder="e.g. Hive"
           keyboardType="default"
         />
@@ -212,7 +169,7 @@ const AddTask = () => {
           <TouchableOpacity 
           style={{height: 25, backgroundColor: '#C4C4C4', borderRadius: 5, margin: 11, justifyContent: 'center'}} 
           onPress={() => setModalCategoryVisible(true)}>
-            {newCategory==''?<Text>  Select Category</Text>:<Text>  {newCategory}</Text>}
+            {category==''?<Text>  Select Category</Text>:<Text>  {category}</Text>}
           </TouchableOpacity>
           {/* {getModalCategory()} */}
 
@@ -221,7 +178,7 @@ const AddTask = () => {
           Date:
         </Text>
         <TouchableOpacity style={{height: 25, backgroundColor: '#C4C4C4', borderRadius: 5, margin: 13, justifyContent: 'center'}}
-        onPress={()=>{ setTimeType("Date"); showMode('newDate')} }>
+        onPress={()=>{ setTimeType("Date"); showMode('date')} }>
           <Text>  {dateText}</Text>
         </TouchableOpacity>
         
@@ -232,7 +189,7 @@ const AddTask = () => {
         <TouchableOpacity 
         style={{height: 25, backgroundColor: '#C4C4C4', borderRadius: 5, margin: 11, justifyContent: 'center'}}
         onPress={() => setModalReminderVisible(true)}>
-          {newReminder ==''?<Text>  Select Reminder</Text>:<Text>  {newReminder}</Text>}
+          {reminder==''?<Text>  Select Reminder</Text>:<Text>  {reminder}</Text>}
         </TouchableOpacity>
 
         <Text
@@ -241,47 +198,21 @@ const AddTask = () => {
         </Text>
         <TextInput
           style={styles.longInput}
-          onChangeText={setNewRemarks}
-          value={newRemarks}
+          onChangeText={onChangeRemarks}
+          value={Remarks}
           placeholder="Details (e.g. items to bring along)"
           keyboardType="default"
           multiline={true}
         />
-        <TouchableOpacity style={styles.saveButton} onPress={createTask}>
+        <TouchableOpacity style={styles.saveButton}>
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>
-
-        {tasks.map((task) => {
-          return (
-            <NavigationContainer independent={true}>
-                <Text>
-                    Name: {task.Name},
-                    Location: {task.Location},
-                    startTime: {task.startTime},
-                    endTime: {task.endTime},
-                    Category: {task.Category},
-                    Reminder: {task.Reminder},
-                    Remarks: {task.Remarks},
-                    taskID: {task.taskID},
-                    Date: {task.date} {/* date must be small letter not Date!*/}
-                </Text>
-
-                <Button
-                onPress={() => deleteTask(task.id)}
-                title= "Delete Task"
-                >
-                </Button>
-            </NavigationContainer>
-          );
-        })}
-
         </ScrollView>
       </SafeAreaView>
-
         {show && (
             <DateTimePicker
             testID='dateTimePicker'
-            value={newDate}
+            value={date}
             mode = {mode}
             is24Hour = {true}
             display='default'
@@ -290,7 +221,6 @@ const AddTask = () => {
           )}
         {getModalCategory()}
         {getModalReminder()}
-
     </View>
   );
 };

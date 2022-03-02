@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { View, Text } from 'react-native'
-import AddComponents from '../AddComponents.js';
+import AddCategory from '../AddCategory';
 
 
 
 
 const PlusScreen = ({navigation}) => {
     return (
-      <AddComponents/>
+      <AddCategory/>
     );
 };
 
