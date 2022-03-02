@@ -30,10 +30,10 @@ function HabitsScreen() {
             {
                 Name: newName, 
                 Category: newCategory,
-                taskID: newTaskID,
+                // taskID: newTaskID,
                 Location: newLocation,
-                startTime: newStartTime,
-                endTime: newEndTime,
+                // startTime: newStartTime,
+                // endTime: newEndTime,
                 date: newDate,
                 Reminder: newReminder,
                 Remarks: newRemarks
@@ -130,12 +130,12 @@ function HabitsScreen() {
                 <Text>
                     Name: {task.Name},
                     Location: {task.Location},
-                    startTime: {task.startTime},
-                    endTime: {task.endTime},
+                    {/* startTime: {task.startTime}, */}
+                    {/* endTime: {task.endTime}, */}
                     Category: {task.Category},
                     Reminder: {task.Reminder},
                     Remarks: {task.Remarks},
-                    taskID: {task.taskID},
+                    {/* taskID: {task.taskID}, */}
                     Date: {task.date} {/* date must be small letter not Date!*/}
                 </Text>
 

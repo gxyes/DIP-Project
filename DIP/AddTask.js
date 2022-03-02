@@ -22,9 +22,6 @@ const AddTask = () => {
   const [newRemarks, setNewRemarks] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [newReminder, setNewReminder] = useState("");
-  
-  // const [category, setCategory] = useState("");
-  // const [reminder, setReminder] = useState("");
 
   // additional firebase stuff
   const [tasks, setTasks] = useState([]);
@@ -143,18 +140,19 @@ const AddTask = () => {
     await addDoc(tasksCollectionRef,
         {
             Name: newName, 
-            Category: newCategory,
-            taskID: newTaskID,
+            // Category: newCategory,
+            // taskID: newTaskID,
             Location: newLocation,
-            startTime: newStartTime,
-            endTime: newEndTime,
-            date: newDate,
+            // startTime: newStartTime,
+            // endTime: newEndTime,
+            date: dateText,
             Reminder: newReminder,
-            Remarks: newRemarks
+            Remarks: newRemarks,
+            Category: newCategory
         }
         );
   };
-
+  
   const deleteTask = async (id) =>{
       const taskDoc = doc(db, "Task", id);
       await deleteDoc(taskDoc)
@@ -166,8 +164,11 @@ const AddTask = () => {
       setTasks(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
 
-    getTasks();
-  },[tasks]);
+    setInterval(() => {
+      getTasks();
+      console.log(getTasks);
+    }, 1800)
+  },[]);
 
 
   return (
@@ -257,12 +258,12 @@ const AddTask = () => {
                 <Text>
                     Name: {task.Name},
                     Location: {task.Location},
-                    startTime: {task.startTime},
-                    endTime: {task.endTime},
+                    {/* startTime: {task.startTime}, */}
+                    {/* endTime: {task.endTime}, */}
                     Category: {task.Category},
                     Reminder: {task.Reminder},
                     Remarks: {task.Remarks},
-                    taskID: {task.taskID},
+                    {/* taskID: {task.taskID}, */}
                     Date: {task.date} {/* date must be small letter not Date!*/}
                 </Text>
 
