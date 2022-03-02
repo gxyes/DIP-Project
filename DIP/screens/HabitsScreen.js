@@ -53,7 +53,7 @@ function HabitsScreen() {
       };
   
       getTasks();
-    },[tasks]);
+    },[]);
   
     return (
       <ScrollView>
