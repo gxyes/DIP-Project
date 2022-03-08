@@ -2,21 +2,44 @@ import { StatusBar } from 'expo-status-bar';
 import React from "react";
 import { useState } from 'react';
 import { TouchableOpacity, SafeAreaView, ScrollView, StyleSheet, TextInput, Text, View, Button,
-   Dimensions, Image, Platform } from "react-native";
+   Dimensions, Image, Platform, LogBox } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 import Modal from "react-native-modalbox";
+import { NavigationContainer } from '@react-navigation/native';
+
+//Required imports for database
+import {useEffect} from "react";
+import {db} from './firebase_config';
+import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
+
+// ignore warning for constantly refreshing view
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 const AddDeadline = () => {
-  // base const
-  const [name, onChangeName] = React.useState(null);
-  const [Remarks, onChangeRemarks] = React.useState(null);
+  const [newName, setNewName] = useState("");
+  const [newRemarks, setNewRemarks] = useState("");
+  const [newCategory, setNewCategory] = useState("");
+  const [newReminder, setNewReminder] = useState("");
+
+  // additional firebase stuff
+  const [deadline, setDeadlines] = useState([]);
+  const deadlineCollectionRef = collection(db, "Deadline");
+
+  // datetimepicker const
+  const [mode,setMode]= useState('newDate');
+  const [show,setShow]= useState(false);
+  const [newDate, setNewDate]= useState(new Date(Date.now()));
+  const [dateText,setDateText]= useState('Select Date');
+  const [newStartTime, setNewStartTime] = useState("Start Time")
+  const [newEndTime, setNewEndTime] = useState("Start Time")
+  const [timeType, setTimeType] = useState('');
+  const [dateType, setDateType] = useState('');
 
   // category/reminder const & declaration
   const categoryList = ["Category1", "Category2", "Category3"];
   const reminderList = ["No Reminder",
-    "At time of event",
+    "At time of deadline",
     "5 minutes before",
     "15 minutes before",
     "30 minutes before",
@@ -32,17 +55,15 @@ const AddDeadline = () => {
   ]
   const [modalCategoryVisible, setModalCategoryVisible] = useState(false);
   const [modalReminderVisible, setModalReminderVisible] = useState(false);
-  const [category, setCategory] = useState("");
-  const [reminder, setReminder] = useState("");
-
+  
   let ListCategory=categoryList.map((item,index)=>{
-    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setCategory(item);setModalCategoryVisible(false); console.log({item})}}> 
+    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setNewCategory(item);setModalCategoryVisible(false); console.log({item})}}> 
         <Text style={{ fontSize: 14 }}>{item}</Text>
   </TouchableOpacity>
   })
 
   let ListReminders=reminderList.map((item,index)=>{
-    return <TouchableOpacity style={styles.buttonStyle} onPress={() => {setReminder(item); setModalReminderVisible(false)}}>
+    return <TouchableOpacity style={styles.buttonStyle} onPress={() => {setNewReminder(item); setModalReminderVisible(false)}}>
         <Image
           source={require('./assets/alarm.png')} style={{width: 15, height: 15}} 
           // style={styles.ImageIconStyle}
@@ -94,37 +115,58 @@ const AddDeadline = () => {
     );
   };
 
-  // datetimepicker const
-  const [mode,setMode]= useState('date');
-  const [show,setShow]= useState(false);
-  const [date, setDate]= useState(new Date(Date.now()));
-  const [dateText,setDateText]= useState('Select Date');
-  const [timeStart,setTimeStart]= useState('Start Time');
-  const [timeEnd,setTimeEnd]= useState('End Time');
-  // const [text,setText]= useState('  Empty');
-  const [timeType, setTimeType] = useState('');
-  const [dateType, setDateType] = useState('');
-
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
   };
 
   const onChange = (event, selectedDate)=> {
-    const currentDate = selectedDate || date;
+    const currentDate = selectedDate || newDate;
     setShow(Platform.OS === 'ios');
-    setDate(currentDate);
+    setNewDate(currentDate);
 
     let tempDate = new Date(currentDate);
     let fDate = tempDate.getDate()+'/'+(tempDate.getMonth()+1)+'/'+tempDate.getFullYear();
     let fTime = tempDate.getHours() + ':' + tempDate.getMinutes();
     // setDateText(fDate);
     {timeType == 'Date' ? setDateText(fDate) : null};
-    {timeType == 'Start' ? setTimeStart(fTime) : null};
-    {timeType == 'End' ? setTimeEnd(fTime) : null};
+    {timeType == 'Start' ? setNewStartTime(fTime) : null};
+    {timeType == 'End' ? setNewEndTime(fTime) : null};
 
     console.log(fDate+"("+fTime+")"+"("+sTime+")")
   };
+
+  const createDeadline = async () => {
+    await addDoc(deadlineCollectionRef,
+        {
+            Name: newName, 
+            // deadlineID: newDeadlineID,
+            startTime: newStartTime,
+            endTime: newEndTime,
+            date: dateText,
+            Reminder: newReminder,
+            Remarks: newRemarks,
+            Category: newCategory
+        }
+        );
+  };
+  
+  const deleteDeadline = async (id) =>{
+      const deadlineDoc = doc(db, "Deadline", id);
+      await deleteDoc(deadlineDoc)
+  }
+
+  useEffect(() => {
+    const getDeadlines = async () => {
+      const data = await getDocs(deadlineCollectionRef);
+      setDeadlines(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+
+    setInterval(() => {
+      getDeadlines();
+      console.log(getDeadlines);
+    }, 1800)
+  },[]);
 
 
   return (
@@ -144,8 +186,8 @@ const AddDeadline = () => {
         </Text>
         <TextInput
           style={styles.Input}
-          onChangeText={onChangeName}
-          value={name}
+          onChangeText={setNewName}
+          value={newName}
           placeholder="e.g. Work / Study"
           keyboardType="default"
         />
@@ -155,11 +197,11 @@ const AddDeadline = () => {
           Category:
         </Text>
 
-          <TouchableOpacity 
-          style={{height: 25, backgroundColor: '#C4C4C4', borderRadius: 5, margin: 11, justifyContent: 'center'}} 
-          onPress={() => setModalCategoryVisible(true)}>
-            {category==''?<Text>  Select Category</Text>:<Text>  {category}</Text>}
-          </TouchableOpacity>
+        <TouchableOpacity 
+        style={{height: 25, backgroundColor: '#C4C4C4', borderRadius: 5, margin: 11, justifyContent: 'center'}} 
+        onPress={() => setModalCategoryVisible(true)}>
+          {newCategory==''?<Text>  Select Category</Text>:<Text>  {newCategory}</Text>}
+        </TouchableOpacity>
         
         <Text
           style={styles.Heading}>
@@ -177,7 +219,7 @@ const AddDeadline = () => {
         <TouchableOpacity 
         style={{height: 25, backgroundColor: '#C4C4C4', borderRadius: 5, margin: 11, justifyContent: 'center'}}
         onPress={() => setModalReminderVisible(true)}>
-          {reminder==''?<Text>  Select Reminder</Text>:<Text>  {reminder}</Text>}
+          {newReminder ==''?<Text>  Select Reminder</Text>:<Text>  {newReminder}</Text>}
         </TouchableOpacity>
 
         <Text
@@ -186,30 +228,53 @@ const AddDeadline = () => {
         </Text>
         <TextInput
           style={styles.longInput}
-          onChangeText={onChangeRemarks}
-          value={Remarks}
+          onChangeText={setNewRemarks}
+          value={newRemarks}
           placeholder="Details (e.g. items to bring along)"
           keyboardType="default"
-          multiline={true} // ios top-left align
+          multiline={true}
         />
 
-        <TouchableOpacity style={styles.saveButton}>
+        <TouchableOpacity style={styles.saveButton} onPress={createDeadline}>
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>
+
+        {deadline.map((deadline) => {
+          return (
+            <NavigationContainer independent={true}>
+                <Text>
+                    Name: {deadline.Name},
+                    Location: {deadline.Location},
+                    Category: {deadline.Category},
+                    Reminder: {deadline.Reminder},
+                    Remarks: {deadline.Remarks},
+                    {/* deadlineID: {deadline.deadlineID}, */}
+                    Date: {deadline.date} {/* date must be small letter not Date!*/}
+                </Text>
+
+                <Button
+                onPress={() => deleteDeadline(deadline.id)}
+                title= "Delete Deadline"
+                >
+                </Button>
+            </NavigationContainer>
+          );
+        })}
+
         </ScrollView>
       </SafeAreaView>
       {show && (
           <DateTimePicker
           testID='dateTimePicker'
-          value={date}
+          value={newDate}
           mode = {mode}
           is24Hour = {true}
           display='default'
           onChange={onChange}
           />
-        )}
-       {getModalCategory()}
-       {getModalReminder()}
+      )}
+      {getModalCategory()}
+      {getModalReminder()}
     </View>
   );
 };
@@ -330,9 +395,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     //fontWeight: "bold",
     padding: 10,
-  },
-  scrollView: {
-    // flex: 1,
   },
   timeContainer: {
     flex: 1,

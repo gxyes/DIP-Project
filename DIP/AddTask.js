@@ -5,7 +5,8 @@ import { TouchableOpacity, SafeAreaView, ScrollView, StyleSheet, TextInput, Text
    Dimensions, Image, Platform, LogBox } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Modal from "react-native-modalbox";import { NavigationContainer } from '@react-navigation/native';
+import Modal from "react-native-modalbox";
+import { NavigationContainer } from '@react-navigation/native';
 
 //Required imports for database
 import {useEffect} from "react";
@@ -139,12 +140,9 @@ const AddTask = () => {
   const createTask = async () => {
     await addDoc(tasksCollectionRef,
         {
-            Name: newName, 
-            // Category: newCategory,
             // taskID: newTaskID,
+            Name: newName, 
             Location: newLocation,
-            // startTime: newStartTime,
-            // endTime: newEndTime,
             date: dateText,
             Reminder: newReminder,
             Remarks: newRemarks,
@@ -215,7 +213,6 @@ const AddTask = () => {
           onPress={() => setModalCategoryVisible(true)}>
             {newCategory==''?<Text>  Select Category</Text>:<Text>  {newCategory}</Text>}
           </TouchableOpacity>
-          {/* {getModalCategory()} */}
 
         <Text
           style={styles.Heading}>
@@ -256,14 +253,12 @@ const AddTask = () => {
           return (
             <NavigationContainer independent={true}>
                 <Text>
+                    {/* taskID: {task.taskID}, */}
                     Name: {task.Name},
                     Location: {task.Location},
-                    {/* startTime: {task.startTime}, */}
-                    {/* endTime: {task.endTime}, */}
                     Category: {task.Category},
                     Reminder: {task.Reminder},
                     Remarks: {task.Remarks},
-                    {/* taskID: {task.taskID}, */}
                     Date: {task.date} {/* date must be small letter not Date!*/}
                 </Text>
 
@@ -291,7 +286,6 @@ const AddTask = () => {
           )}
         {getModalCategory()}
         {getModalReminder()}
-
     </View>
   );
 };
