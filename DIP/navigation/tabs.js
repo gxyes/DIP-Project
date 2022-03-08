@@ -12,7 +12,7 @@ const Tab = createBottomTabNavigator();
 const PlusButton = ({children,onPress}) => (
     <TouchableOpacity
         style={{
-            top: -30,
+            top: -20,
             justifyContent:'center',
             alignItems:'center',
 
@@ -21,8 +21,8 @@ const PlusButton = ({children,onPress}) => (
     >
         <View
             style={{
-                width:60,
-                height:60,
+                width:40,
+                height:40,
                 borderRadius:35,
                 backgroundColor: '#8a9f95'
             }}
@@ -35,21 +35,22 @@ const PlusButton = ({children,onPress}) => (
 const Tabs = () => {
     return(
         <Tab.Navigator
-            tabBarOptions={{
-                showLabel: false,
+            screenOptions={{
+                "tabBarShowLabel": false,
+                headerShown: false,
             }}
         >
             <Tab.Screen name = "Timetable" component={TimetableScreen} options=
                 {{
                     tabBarIcon:({focused}) => (
-                        <View style={{allignItens: 'center', justifyContent: 'center'}}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
                             <Image
                                 source={require('../assets/timetable.png')}
                                 resizeMode='contain'
                                 style={{
                                     width:45,
                                     height:25,
-                                    tintColor: '#a9c7c8'
+                                    // tintColor: '#a9c7c8'
                                 }}
                             />
                             <Text
@@ -63,19 +64,19 @@ const Tabs = () => {
             <Tab.Screen name = "GameScreen" component={GameScreen}options=
                 {{
                     tabBarIcon:({focused}) => (
-                        <View style={{allignItens: 'center', justifyContent: 'center'}}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
                             <Image
-                                source={require('../assets/favicon.png')}
+                                source={require('../assets/game.png')}
                                 resizeMode='contain'
                                 style={{
                                     width:65,
                                     height:25,
-                                    tintColor: '#a9c7c8'
+                                    // tintColor: '#a9c7c8'
                                 }}
                             />
                             <Text
                                 style={{color:'#a9c7c8', fontSize:12}}>
-                                GameScreen
+                                Game
                             </Text>
                         </View>
                     )
@@ -87,8 +88,8 @@ const Tabs = () => {
                             source={require('../assets/plus.png')}
                             resizeMode='contain'
                             style={{
-                                width:35,
-                                height:35,
+                                width:30,
+                                height:30,
                                 tintColor:'#a9c7c8',
                             }}
                         />
@@ -101,19 +102,19 @@ const Tabs = () => {
             <Tab.Screen name = "HabitsScreen" component={HabitsScreen}options=
                 {{
                     tabBarIcon:({focused}) => (
-                        <View style={{allignItens: 'center', justifyContent: 'center'}}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
                             <Image
-                                source={require('../assets/adaptive-icon.png')}
+                                source={require('../assets/habits.png')}
                                 resizeMode='contain'
                                 style={{
                                     width:60,
                                     height:25,
-                                    tintColor: '#a9c7c8'
+                                    // tintColor: '#a9c7c8'
                                 }}
                             />
                             <Text
                                 style={{color:'#a9c7c8', fontSize:12}}>
-                                HabitsScreen
+                                Habits
                             </Text>
                         </View>
                     )
@@ -121,19 +122,19 @@ const Tabs = () => {
             <Tab.Screen name = "MeScreen" component={MeScreen}options=
                 {{
                     tabBarIcon:({focused}) => (
-                        <View style={{allignItens: 'center', justifyContent: 'center'}}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
                             <Image
-                                source={require('../assets/icon.png')}
+                                source={require('../assets/me.png')}
                                 resizeMode='contain'
                                 style={{
                                     width:45,
                                     height:25,
-                                    tintColor: '#a9c7c8'
+                                    // tintColor: '#a9c7c8'
                                 }}
                             />
                             <Text
                                 style={{color:'#a9c7c8', fontSize:12}}>
-                                MeScreen
+                                Me
                             </Text>
                         </View>
                     )
