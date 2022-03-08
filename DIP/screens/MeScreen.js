@@ -7,12 +7,17 @@ import {
     SafeAreaView,
     Image,
     TouchableOpacity,
-    Dimensions
+    Dimensions,
+    TextInput,
+    ImageBackground,
   } from 'react-native';
   
 import * as ImagePicker from 'expo-image-picker';
 import {LineChart} from "react-native-chart-kit";
 import { render } from 'react-dom';
+import { createStackNavigator } from "@react-navigation/stack";
+
+
   
 const screenWidth = Dimensions.get("window").width;
 const data = {
@@ -46,123 +51,48 @@ const data = {
   };
   const tasksCompleted = 20
 
-export default function MeScreen({ navigation }) {
+function MeScreen({ navigation, route }) {
     const [selectedImage, setSelectedImage] = React.useState(null);
+    const [userName, setUserName] = React.useState('Joyce Tan');
+    const [userInfo1, setUserInfo1] = React.useState('NTU IEM year 3 Student');
+    const [userInfo2, setUserInfo2] = React.useState('DIP Project');
 
-    let openImagePickerAsync = async () => {
-        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-        if (permissionResult.granted === false) {
-        alert('Permission to access camera roll is required!');
-        return;
-        }
-
-        let pickerResult = await ImagePicker.launchImageLibraryAsync();
-
-        if (pickerResult.cancelled === true) {
-        return;
-        }
-
-        setSelectedImage({ localUri: pickerResult.uri });
-    };
-
-    if (selectedImage !== null) {
-        return (
-          <SafeAreaView style={styles.container}>
-              <View style={styles.userInfoSection}>
-                <View style={{flexDirection:'row',marginTop:10}}>
-                    {/* <Image style={styles.avatar}
-                      source={{uri: selectedImage.localUri}}/> */}
-                      
-                  <Image style={styles.avatar}
-                    
-                    source={{uri: selectedImage.localUri}}/>
-    
-    
-                  <View style={{marginLeft:10,marginTop:15}}>
-                    <Text style={[styles.name,{marginBottom:10}]}>Joyce Tan </Text>
-                    <Text style={styles.userInfo}> NTU IEM year 3 Student </Text>
-                    <Text style={styles.userInfo}> DIP Project </Text>
-                  </View>
-                </View>
-              </View>
-              
-    
-            
-                <View style={styles.item}>
-                  <View style={styles.iconContent}>
-                    <Image style={styles.icon} source={{uri: "https://img.icons8.com/color-glass/48/000000/pencil.png"}}/>
-                  </View>
-                  <View style={styles.infoContent}>
-                  <TouchableOpacity onPress={openImagePickerAsync} style={styles.button}>
-                    <Text style={styles.info}>Edit</Text>
-                    </TouchableOpacity>
-        
-                  </View>
-                </View>
-    
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                {/* <ScrollView> */}
-                  <TouchableOpacity style={styles.touchableStyle}>
-                    <Text style={styles.textStyle}>
-                      Total Task Completed:   
-                      <Text style={styles.boldText}>  {tasksCompleted}  </Text>
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.touchableStyle}>
-                    <Text style={styles.textStyle}>
-                      Your Focus Time (Last Week): {'  '}  
-                    </Text>
-                  </TouchableOpacity>
-                  <LineChart
-                  data={data}
-                  width={screenWidth}
-                  height={220}
-                  chartConfig={chartConfig}
-                  bezier
-                  />
-                {/* </ScrollView> */}
-            </View>
-       
-          </SafeAreaView>
-        
-        );
-    }
-
+    React.useEffect(() => {
+      if (route.params?.newName) {
+        setUserName(route.params.newName)
+      };
+      if (route.params?.newInfo1) {
+        setUserInfo1(route.params.newInfo1)
+      };
+      if (route.params?.newInfo2) {
+        setUserInfo2(route.params.newInfo2)
+      };
+      if (route.params?.selectedImage) {
+        setSelectedImage(route.params.selectedImage)
+      }
+    }, [route.params?.newName]);
+  
     return (
         <SafeAreaView style={styles.container}>
           <View style={styles.userInfoSection}>
             <View style={{flexDirection:'row',marginTop:10}}>
-                {/* <Image style={styles.avatar}
-                  source={{uri: selectedImage.localUri}}/> */}
-                  
-              <Image style={styles.avatar}
-                
-                source={require("./assets/avatar_1.png")}/>
-                {/* // source={{uri: selectedImage.localUri}}/> */}
-
-
+              
+              {selectedImage!==null? <Image style={styles.avatar}
+                    source={{uri: selectedImage.localUri}}/>:<Image style={styles.avatar}
+                source={require("../assets/avatar_1.png")}/>}
+ 
               <View style={{marginLeft:10,marginTop:15}}>
-                <Text style={[styles.name,{marginBottom:10}]}>Joyce Tan </Text>
-                <Text style={styles.userInfo}> NTU IEM year 3 Student </Text>
-                <Text style={styles.userInfo}> DIP Project </Text>
+                <Text style={[styles.name,{marginBottom:10}]}>{userName}</Text>
+                <Text style={styles.userInfo}> {userInfo1} </Text>
+                <Text style={styles.userInfo}> {userInfo2} </Text>
+                <TouchableOpacity onPress={() => navigation.navigate("Edit Profile",{ userName,userInfo1,userInfo2, selectedImage})} style={styles.button}>
+                  <Image style={styles.icon} source={{uri: "https://img.icons8.com/color-glass/48/000000/pencil.png"}}/>
+                  <Text style={styles.info}> Edit </Text>
+                </TouchableOpacity>
+  
               </View>
             </View>
           </View>
-          
-
-        
-            <View style={styles.item}>
-              <View style={styles.iconContent}>
-                <Image style={styles.icon} source={{uri: "https://img.icons8.com/color-glass/48/000000/pencil.png"}}/>
-              </View>
-              <View style={styles.infoContent}>
-              <TouchableOpacity onPress={openImagePickerAsync} style={styles.button}>
-                <Text style={styles.info}>Edit</Text>
-                </TouchableOpacity>
-    
-              </View>
-            </View>
 
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             {/* <ScrollView> */}
@@ -189,7 +119,110 @@ export default function MeScreen({ navigation }) {
    
       </SafeAreaView>
     )
-}
+};
+
+function EditProfileScreen({route, navigation}) {
+  const user = route.params.userName;
+  const info1 = route.params.userInfo1;
+  const info2 = route.params.userInfo2;
+  const [selectedImage, setSelectedImage] = React.useState(route.params.selectedImage);
+  const [newName, setNewName] = React.useState('');
+  const [newInfo1, setNewInfo1] = React.useState('');
+  const [newInfo2, setNewInfo2] = React.useState('');
+  let openImagePickerAsync = async () => {
+    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+    alert('Permission to access camera roll is required!');
+    return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+
+    if (pickerResult.cancelled === true) {
+    return;
+    }
+
+    setSelectedImage({ localUri: pickerResult.uri });
+};
+  return (
+    <SafeAreaView>
+      <View>
+        <Text
+          style={styles.e_Title}>
+          Edit Profile
+        </Text>
+      </View>
+      <View style={styles.e_HeaderBorder}/>
+
+      {/* content */}
+      <TouchableOpacity onPress={openImagePickerAsync}>
+        {selectedImage!==null? <Image style={styles.editAvatar}
+                    source={{uri: selectedImage.localUri}}/>:<Image style={styles.editAvatar}
+                source={require("../assets/avatar_1.png")}/>}
+        <Text
+        style={styles.avatarText}>
+        Edit
+      </Text>
+      </TouchableOpacity>
+      <Text
+        style={styles.e_Heading}>
+        Name:
+      </Text>
+      <TextInput
+        style={styles.e_Input}
+        onChangeText={setNewName}
+        value={newName}
+        placeholder={user}
+        keyboardType="default"
+      />
+      <Text
+        style={styles.e_Heading}>
+        Information:
+      </Text>
+      <TextInput
+        style={styles.e_Input}
+        onChangeText={setNewInfo1}
+        value={newInfo1}
+        placeholder={info1}
+        keyboardType="default"
+      />
+      <Text
+        style={styles.e_Heading}>
+        Additional Details:
+      </Text>
+      <TextInput
+        style={styles.e_Input}
+        onChangeText={setNewInfo2}
+        value={newInfo2}
+        placeholder={info2}
+        keyboardType="default"
+      />
+
+      <TouchableOpacity onPress={() => {
+          // Pass and merge params back to home screen
+          navigation.navigate({
+            name: 'Me Screen',
+            params: { newName, newInfo1, newInfo2 },
+            merge: true,
+          })}} style={styles.e_saveButton}>
+        <Text style={styles.e_saveButtonText}>Save</Text>
+      </TouchableOpacity>
+
+    </SafeAreaView>
+    )
+};
+
+const Stack = createStackNavigator()
+export default function ComponentStack({route: {params}}) {
+
+  return (
+    <Stack.Navigator initialRouteName = 'Me Screen'>
+      <Stack.Screen name="Me Screen" component={MeScreen} />
+      <Stack.Screen name="Edit Profile" component={EditProfileScreen} initialParams={params} />
+    </Stack.Navigator>
+  )
+};
 
 const styles = StyleSheet.create({
     header:{
@@ -220,14 +253,18 @@ const styles = StyleSheet.create({
       color:"#778899",
       fontWeight:'600',
     },
-  
+    userInfoSection:{
+      backgroundColor:"#FFFFFF",
+      width: screenWidth,
+    },
     item:{
       flexDirection : 'row',
     },
     infoContent:{
       flex:1,
-      alignItems:'flex-start',
-      paddingLeft:5
+      justifyContent:"flex-end",
+      paddingLeft:5,
+      alignContent: "flex-start",
     },
     iconContent:{
       flex:1,
@@ -240,10 +277,13 @@ const styles = StyleSheet.create({
       marginTop:20,
     },
     info:{
-      fontSize:18,
+      fontSize:16,
       marginTop:20,
       color: "#FFFFFF",
-      backgroundColor: "#778899", 
+      backgroundColor: "#9cabba", 
+      borderRadius: 10,
+      paddingHorizontal:5,
+      overflow:"hidden",
     },
     thumbnail: {
       width: 300,
@@ -274,5 +314,79 @@ const styles = StyleSheet.create({
       alignSelf: 'flex-start',
       marginLeft:20,
       marginBottom:10,
-    }
+    },
+    button:{
+      flexDirection:"row",
+      alignItems:"center",
+      borderRadius: 5,
+    },
+    editAvatar: {
+      alignItems: 'center',
+      width: 130,
+      height: 130,
+      borderRadius: 63,
+      borderWidth: 3,
+      borderColor: "white",
+      marginBottom:0,
+      marginTop:15,
+      marginLeft:0.5*(screenWidth)-65,
+      opacity: 1
+    },
+    avatarText: {
+      alignSelf: 'center',
+      fontSize: 16,
+      color: '#5F5DA6',
+    },
+    e_Input: {
+      height: 40,
+      margin: 12,
+      borderWidth: 1,
+      padding: 10,
+      borderColor: '#979797',
+      borderRadius: 8,
+    },
+    e_Heading: {
+      height: 20,
+      margin: 12,
+      marginBottom: -10,
+      fontWeight: 'bold',
+    },
+    e_AddPagesHeader: {
+      height: 20,
+      margin: 12,
+      color: '#5F5DA6',
+      fontWeight: 'bold',
+    },
+    e_AddPagesBorder: {
+      borderBottomColor: '#C4C4C4',
+      borderBottomWidth: 1,
+      marginRight: 12,
+      marginLeft: 12,
+      marginTop: -5,
+    },
+    e_HeaderBorder: {
+      borderBottomColor: '#C4C4C4',
+      borderBottomWidth: 1,
+    },
+    e_Title: {
+      height: 20,
+      margin:12,
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#5F5DA6',
+    },
+    e_saveButton: {
+      margin: 13,
+      height: 35,
+      marginTop: 25,
+      backgroundColor: '#5F5DA6',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 8,
+    },
+    e_saveButtonText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#fff'
+    },
   });
