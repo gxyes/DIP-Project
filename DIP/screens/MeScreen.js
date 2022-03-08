@@ -34,10 +34,10 @@ const data = {
   };
   const chartConfig = {
     backgroundColor: '#FFFFFF',
-    backgroundGradientFrom: "#C4C4C4",
-    backgroundGradientFromOpacity: 0,
+    backgroundGradientFrom: "#FFFFFF",
+    backgroundGradientFromOpacity: 0.1,
     backgroundGradientTo: "#FFFFFF",
-    backgroundGradientToOpacity: 0.5,
+    backgroundGradientToOpacity: 0.7,
     fillShadowGradientFrom: "#FF7B00",
     fillShadowGradientFromOpacity: 0.2,
     fillShadowGradientTo: "#FFFFFF",
@@ -75,26 +75,26 @@ function MeScreen({ navigation, route }) {
     return (
         <SafeAreaView style={styles.container}>
           <View style={styles.userInfoSection}>
-            <View style={{flexDirection:'row',marginTop:10}}>
+            <View style={{flexDirection:'row',marginTop:10, flexGrow:1}}>
               
               {selectedImage!==null? <Image style={styles.avatar}
                     source={{uri: selectedImage.localUri}}/>:<Image style={styles.avatar}
                 source={require("../assets/avatar_1.png")}/>}
  
-              <View style={{marginLeft:10,marginTop:15}}>
+              <View style={{marginLeft:10,marginTop:15, flexShrink:1}}>
                 <Text style={[styles.name,{marginBottom:10}]}>{userName}</Text>
-                <Text style={styles.userInfo}> {userInfo1} </Text>
-                <Text style={styles.userInfo}> {userInfo2} </Text>
+                <Text style={styles.userInfo1}> {userInfo1} </Text>
+                <Text style={styles.userInfo2}> {userInfo2} </Text>
                 <TouchableOpacity onPress={() => navigation.navigate("Edit Profile",{ userName,userInfo1,userInfo2, selectedImage})} style={styles.button}>
                   <Image style={styles.icon} source={{uri: "https://img.icons8.com/color-glass/48/000000/pencil.png"}}/>
                   <Text style={styles.info}> Edit </Text>
-                </TouchableOpacity>
-  
+              </TouchableOpacity>
               </View>
+              
             </View>
           </View>
 
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ flex: 1, alignItems: 'center', paddingTop:20 }}>
             {/* <ScrollView> */}
               <TouchableOpacity style={styles.touchableStyle}>
                 <Text style={styles.textStyle}>
@@ -110,7 +110,7 @@ function MeScreen({ navigation, route }) {
               <LineChart
               data={data}
               width={screenWidth}
-              height={220}
+              height={250}
               chartConfig={chartConfig}
               bezier
               />
@@ -203,7 +203,7 @@ function EditProfileScreen({route, navigation}) {
           // Pass and merge params back to home screen
           navigation.navigate({
             name: 'Me Screen',
-            params: { newName, newInfo1, newInfo2 },
+            params: { newName, newInfo1, newInfo2, selectedImage },
             merge: true,
           })}} style={styles.e_saveButton}>
         <Text style={styles.e_saveButtonText}>Save</Text>
@@ -225,13 +225,7 @@ export default function ComponentStack({route: {params}}) {
 };
 
 const styles = StyleSheet.create({
-    header:{
-      backgroundColor: "#DCDCDC",
-    },
-    headerContent:{
-      padding:30,
-      alignItems: 'center',
-    },
+  //me screen
     avatar: {
       width: 130,
       height: 130,
@@ -242,29 +236,45 @@ const styles = StyleSheet.create({
       marginTop:15,
       marginLeft:30
     },
-    name:{
-      fontSize:22,
-      color:"#000000",
-      fontWeight:'600',
-      marginTop:15
+    avatarText: {
+      alignSelf: 'center',
+      fontSize: 16,
+      color: '#5F5DA6',
     },
-    userInfo:{
-      fontSize:16,
-      color:"#778899",
-      fontWeight:'600',
+    boldText:{
+      fontWeight: 'bold',
     },
-    userInfoSection:{
-      backgroundColor:"#FFFFFF",
-      width: screenWidth,
+    button:{
+      flexDirection:'row-reverse',
+      alignItems:"center",
+      position: "relative",
+      marginRight:0,
     },
-    item:{
-      flexDirection : 'row',
+    container: {
+      flex: 1,
+      backgroundColor: '#e2e2e2',
+      justifyContent: 'center',
+      alignItems:"center",
+      paddingTop: Platform.OS ===  "android" ? StatusBar.currentHeight:0
     },
-    infoContent:{
-      flex:1,
-      justifyContent:"flex-end",
-      paddingLeft:5,
-      alignContent: "flex-start",
+    editAvatar: {
+      alignItems: 'center',
+      width: 130,
+      height: 130,
+      borderRadius: 63,
+      borderWidth: 3,
+      borderColor: "white",
+      marginBottom:0,
+      marginTop:15,
+      marginLeft:0.5*(screenWidth)-65,
+      opacity: 1
+    },
+    header:{
+      backgroundColor: "#DCDCDC",
+    },
+    headerContent:{
+      padding:30,
+      alignItems: 'center',
     },
     iconContent:{
       flex:1,
@@ -285,17 +295,20 @@ const styles = StyleSheet.create({
       paddingHorizontal:5,
       overflow:"hidden",
     },
-    thumbnail: {
-      width: 300,
-      height: 300,
-      resizeMode: "contain"
+    infoContent:{
+      flex:1,
+      justifyContent:"flex-end",
+      paddingLeft:5,
+      alignContent: "flex-start",
     },
-    container: {
-      flex: 1,
-      backgroundColor: '#e2e2e2',
-      justifyContent: 'center',
-      alignItems:"center",
-      paddingTop: Platform.OS ===  "android" ? StatusBar.currentHeight:0
+    item:{
+      flexDirection : 'row',
+    },
+    name:{
+      fontSize:22,
+      color:"#000000",
+      fontWeight:'600',
+      marginTop:15
     },
     posttext:{
       textAlign:'center'
@@ -303,8 +316,10 @@ const styles = StyleSheet.create({
     textStyle:{
       color: 'white',
     },
-    boldText:{
-      fontWeight: 'bold',
+    thumbnail: {
+      width: 300,
+      height: 300,
+      resizeMode: "contain"
     },
     touchableStyle:{
       backgroundColor: '#5F5DA6',
@@ -315,28 +330,21 @@ const styles = StyleSheet.create({
       marginLeft:20,
       marginBottom:10,
     },
-    button:{
-      flexDirection:"row",
-      alignItems:"center",
-      borderRadius: 5,
+    userInfo1:{
+      fontSize:16,
+      color:"#778899",
+      fontWeight:'600',
     },
-    editAvatar: {
-      alignItems: 'center',
-      width: 130,
-      height: 130,
-      borderRadius: 63,
-      borderWidth: 3,
-      borderColor: "white",
-      marginBottom:0,
-      marginTop:15,
-      marginLeft:0.5*(screenWidth)-65,
-      opacity: 1
+    userInfo2:{
+      fontSize:16,
+      color:"#9dadbd",
+      fontWeight:'500',
     },
-    avatarText: {
-      alignSelf: 'center',
-      fontSize: 16,
-      color: '#5F5DA6',
+    userInfoSection:{
+      backgroundColor:"#f9f9f9",
+      width: screenWidth,
     },
+   //edit profile
     e_Input: {
       height: 40,
       margin: 12,
