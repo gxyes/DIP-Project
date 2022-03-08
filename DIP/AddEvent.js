@@ -26,6 +26,8 @@ const AddEvent = () => {
   // additional firebase stuff
   const [event, setEvents] = useState([]);
   const eventCollectionRef = collection(db, "Event");
+  const [category, setCategories] = useState([]);
+  const categoryCollectionRef = collection(db, "Category");
 
   // datetimepicker const
   const [mode,setMode]= useState('newDate');
@@ -37,8 +39,7 @@ const AddEvent = () => {
   const [timeType, setTimeType] = useState('');
   const [dateType, setDateType] = useState('');
   
-  // category/reminder const & declaration
-  const categoryList = ["Category1", "Category2", "Category3"];
+  // reminder const & declaration
   const reminderList = ["No Reminder",
     "At time of event",
     "5 minutes before",
@@ -57,9 +58,9 @@ const AddEvent = () => {
   const [modalCategoryVisible, setModalCategoryVisible] = useState(false);
   const [modalReminderVisible, setModalReminderVisible] = useState(false);
 
-  let ListCategory=categoryList.map((item,index)=>{
-    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setNewCategory(item);setModalCategoryVisible(false); console.log({item})}}> 
-        <Text style={{ fontSize: 14 }}>{item}</Text>
+  let ListCategory=category.map((category)=>{
+    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setNewCategory(category.Name);setModalCategoryVisible(false); console.log(category.Name)}}> 
+        <Text style={{ fontSize: 14 }}>{category.Name}</Text>
   </TouchableOpacity>
   })
 
@@ -163,9 +164,16 @@ const AddEvent = () => {
       setEvents(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
 
+    const getCategories = async () => {
+      const data = await getDocs(categoryCollectionRef);
+      setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+
     setInterval(() => {
       getEvents();
+      getCategories();
       console.log(getEvents);
+      console.log(getCategories);
     }, 1800)
   },[]);
 
@@ -238,11 +246,11 @@ const AddEvent = () => {
           Category:
         </Text>
 
-          <TouchableOpacity 
+        <TouchableOpacity 
           style={{height: 25, backgroundColor: '#C4C4C4', borderRadius: 5, margin: 11, justifyContent: 'center'}} 
           onPress={() => setModalCategoryVisible(true)}>
             {newCategory==''?<Text>  Select Category</Text>:<Text>  {newCategory}</Text>}
-          </TouchableOpacity>
+        </TouchableOpacity>
 
         <Text
           style={styles.Heading}>

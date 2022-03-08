@@ -25,6 +25,8 @@ const AddDeadline = () => {
   // additional firebase stuff
   const [deadline, setDeadlines] = useState([]);
   const deadlineCollectionRef = collection(db, "Deadline");
+  const [category, setCategories] = useState([]);
+  const categoryCollectionRef = collection(db, "Category");
 
   // datetimepicker const
   const [mode,setMode]= useState('newDate');
@@ -36,8 +38,7 @@ const AddDeadline = () => {
   const [timeType, setTimeType] = useState('');
   const [dateType, setDateType] = useState('');
 
-  // category/reminder const & declaration
-  const categoryList = ["Category1", "Category2", "Category3"];
+  // reminder const & declaration
   const reminderList = ["No Reminder",
     "At time of deadline",
     "5 minutes before",
@@ -56,9 +57,9 @@ const AddDeadline = () => {
   const [modalCategoryVisible, setModalCategoryVisible] = useState(false);
   const [modalReminderVisible, setModalReminderVisible] = useState(false);
   
-  let ListCategory=categoryList.map((item,index)=>{
-    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setNewCategory(item);setModalCategoryVisible(false); console.log({item})}}> 
-        <Text style={{ fontSize: 14 }}>{item}</Text>
+  let ListCategory=category.map((category)=>{
+    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setNewCategory(category.Name);setModalCategoryVisible(false); console.log(category.Name)}}> 
+        <Text style={{ fontSize: 14 }}>{category.Name}</Text>
   </TouchableOpacity>
   })
 
@@ -141,8 +142,8 @@ const AddDeadline = () => {
         {
             Name: newName, 
             // deadlineID: newDeadlineID,
-            startTime: newStartTime,
-            endTime: newEndTime,
+            // startTime: newStartTime,
+            // endTime: newEndTime,
             date: dateText,
             Reminder: newReminder,
             Remarks: newRemarks,
@@ -162,9 +163,16 @@ const AddDeadline = () => {
       setDeadlines(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
 
+    const getCategories = async () => {
+      const data = await getDocs(categoryCollectionRef);
+      setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+
     setInterval(() => {
       getDeadlines();
+      getCategories();
       console.log(getDeadlines);
+      console.log(getCategories);
     }, 1800)
   },[]);
 
@@ -198,9 +206,9 @@ const AddDeadline = () => {
         </Text>
 
         <TouchableOpacity 
-        style={{height: 25, backgroundColor: '#C4C4C4', borderRadius: 5, margin: 11, justifyContent: 'center'}} 
-        onPress={() => setModalCategoryVisible(true)}>
-          {newCategory==''?<Text>  Select Category</Text>:<Text>  {newCategory}</Text>}
+          style={{height: 25, backgroundColor: '#C4C4C4', borderRadius: 5, margin: 11, justifyContent: 'center'}} 
+          onPress={() => setModalCategoryVisible(true)}>
+            {newCategory==''?<Text>  Select Category</Text>:<Text>  {newCategory}</Text>}
         </TouchableOpacity>
         
         <Text
@@ -244,7 +252,6 @@ const AddDeadline = () => {
             <NavigationContainer independent={true}>
                 <Text>
                     Name: {deadline.Name},
-                    Location: {deadline.Location},
                     Category: {deadline.Category},
                     Reminder: {deadline.Reminder},
                     Remarks: {deadline.Remarks},
