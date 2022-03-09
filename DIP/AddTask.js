@@ -173,8 +173,7 @@ const AddTask = () => {
       getTasks();
       getCategories();
       console.log(getTasks);
-      console.log(getCategories);
-    }, 1800)
+    }, 8000)
   },[]);
 
   const navigation = useNavigation();

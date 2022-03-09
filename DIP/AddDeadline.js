@@ -173,8 +173,7 @@ const AddDeadline = () => {
       getDeadlines();
       getCategories();
       console.log(getDeadlines);
-      console.log(getCategories);
-    }, 1800)
+    }, 8000)
   },[]);
 
   const navigation = useNavigation();

@@ -62,7 +62,7 @@ function AddCategory(){
     setInterval(() => {
       getCategories();
       console.log(getCategories);
-    }, 1800)
+    }, 8000)
   },[]);
   
   const navigation = useNavigation();

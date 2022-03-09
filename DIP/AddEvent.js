@@ -174,8 +174,7 @@ const AddEvent = () => {
       getEvents();
       getCategories();
       console.log(getEvents);
-      console.log(getCategories);
-    }, 1800)
+    }, 8000)
   },[]);
   const navigation = useNavigation();
 
