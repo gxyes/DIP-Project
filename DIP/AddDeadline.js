@@ -7,6 +7,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from "react-native-modalbox";
 import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 //Required imports for database
 import {useEffect} from "react";
@@ -176,7 +177,7 @@ const AddDeadline = () => {
     }, 1800)
   },[]);
 
-
+  const navigation = useNavigation();
   return (
     <View style={{flex:1}}>
       <SafeAreaView>
@@ -243,7 +244,7 @@ const AddDeadline = () => {
           multiline={true}
         />
 
-        <TouchableOpacity style={styles.saveButton} onPress={createDeadline}>
+        <TouchableOpacity style={styles.saveButton} onPress={() => {createDeadline; navigation.navigate('Add Components')}}>
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>
 

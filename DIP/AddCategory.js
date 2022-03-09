@@ -12,12 +12,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import {useEffect} from "react";
 import {db} from './firebase_config';
 import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
+
 
 // ignore warning for constantly refreshing view
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
-const AddCategory = () => {
 
+
+function AddCategory(){
   // base const
   const [newName, setNewName] = useState("");
   const [newAddInfo, setNewAddInfo] = useState("");
@@ -61,7 +64,8 @@ const AddCategory = () => {
       console.log(getCategories);
     }, 1800)
   },[]);
-
+  
+  const navigation = useNavigation();
   return (
     <View style={{flex:1}}>
       <SafeAreaView>
@@ -98,19 +102,20 @@ const AddCategory = () => {
             keyboardType="default"
           />
 
-          <TouchableOpacity style={styles.saveButton} onPress={createCategory}>
+          <TouchableOpacity style={styles.saveButton} onPress={() => {createCategory; navigation.navigate('Add Components')}} >
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
 
           {category.map((category) => {
               return (
                 <NavigationContainer independent={true}>
-                    <Text>
+                  <View style={{marginLeft:15}}> 
+                    <Text> 
                         Name: {category.Name},
                         Additional Info: {category.AddInfo},
                       {/* categortID: {category.categoryID}, */}
                     </Text>
-
+                  </View>
                     <Button
                     onPress={() => deleteCategory(category.id)}
                     title= "Delete Category"
@@ -124,6 +129,7 @@ const AddCategory = () => {
   </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   Input: {
