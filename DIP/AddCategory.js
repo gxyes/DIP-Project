@@ -5,7 +5,8 @@ import { TouchableOpacity, SafeAreaView, ScrollView, StyleSheet, TextInput, Text
    Dimensions, Image, Platform, LogBox } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Modal from "react-native-modalbox";import { NavigationContainer } from '@react-navigation/native';
+import Modal from "react-native-modalbox";
+import { NavigationContainer } from '@react-navigation/native';
 
 //Required imports for database
 import {useEffect} from "react";
@@ -16,83 +17,113 @@ import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 const AddCategory = () => {
-  const [name, onChangeName] = React.useState(null);
-  const [AddInfo, onChangeInfo] = React.useState(null);
+
+  // base const
+  const [newName, setNewName] = useState("");
+  const [newAddInfo, setNewAddInfo] = useState("");
+
+  // additional firebase stuff
+  const [category, setCategories] = useState([]);
+  const categoryCollectionRef = collection(db, "Category");
+
+  // datetimepicker const
+  const [mode,setMode]= useState('newDate');
+  const [show,setShow]= useState(false);
+  const [newDate, setNewDate]= useState(new Date(Date.now()));
+  const [dateText,setDateText]= useState('Select Date');
+  const [newStartTime, setNewStartTime] = useState("Start Time")
+  const [newEndTime, setNewEndTime] = useState("Start Time")
+  const [timeType, setTimeType] = useState('');
+  const [dateType, setDateType] = useState('');
+
+  const createCategory = async () => {
+    await addDoc(categoryCollectionRef,
+        {
+            Name: newName, 
+            AddInfo: newAddInfo,
+        }
+        );
+  };
+  
+  const deleteCategory = async (id) =>{
+      const categoryDoc = doc(db, "Category", id);
+      await deleteDoc(categoryDoc)
+  }
+
+  useEffect(() => {
+    const getCategories = async () => {
+      const data = await getDocs(categoryCollectionRef);
+      setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+
+    setInterval(() => {
+      getCategories();
+      console.log(getCategories);
+    }, 1800)
+  },[]);
 
   return (
-    <SafeAreaView>
-      <View>
-        <Text
-          style={styles.Title}>
-          Category Info
-        </Text>
-      </View>
-      <View style={styles.HeaderBorder}/>
+    <View style={{flex:1}}>
+      <SafeAreaView>
+        <ScrollView>
+          <View>
+            <Text
+              style={styles.Title}>
+              Adding Category
+            </Text>
+          </View>
+          <View style={styles.HeaderBorder}/>
 
-      {/* content */}
-      <Text
-        style={styles.Heading}>
-        Name:
-      </Text>
-      <TextInput
-        style={styles.Input}
-        onChangeText={onChangeName}
-        value={name}
-        placeholder="e.g. Work / Study"
-        keyboardType="default"
-      />
-      <Text
-        style={styles.Heading}>
-        Additional Info:
-      </Text>
-      <TextInput
-        style={styles.Input}
-        onChangeText={onChangeInfo}
-        value={AddInfo}
-        placeholder="e.g. Special arrangements, people"
-        keyboardType="default"
-      />
+          <Text
+            style={styles.Heading}>
+            Name:
+          </Text>
+          <TextInput
+            style={styles.Input}
+            onChangeText={setNewName}
+            value={newName}
+            placeholder="e.g. Work / Study"
+            keyboardType="default"
+          />
 
-      <TouchableOpacity style={styles.saveButton}>
-        <Text style={styles.saveButtonText}>Save</Text>
-      </TouchableOpacity>
+          <Text
+            style={styles.Heading}>
+            Additional Info:
+          </Text>
+          <TextInput
+            style={styles.longInput}
+            onChangeText={setNewAddInfo}
+            value={newAddInfo}
+            placeholder="e.g. Special arrangements, people"
+            keyboardType="default"
+          />
 
+          <TouchableOpacity style={styles.saveButton} onPress={createCategory}>
+            <Text style={styles.saveButtonText}>Save</Text>
+          </TouchableOpacity>
+
+          {category.map((category) => {
+              return (
+                <NavigationContainer independent={true}>
+                    <Text>
+                        Name: {category.Name},
+                        Additional Info: {category.AddInfo},
+                      {/* categortID: {category.categoryID}, */}
+                    </Text>
+
+                    <Button
+                    onPress={() => deleteCategory(category.id)}
+                    title= "Delete Category"
+                    >
+                    </Button>
+                </NavigationContainer>
+              );
+            })}
+      </ScrollView>
     </SafeAreaView>
+  </View>
   );
 };
-
-// function AddEventScreen() {
-//   return (
-//     <AddEvent/>
-//   )
-// }
-
-// function AddDeadlineScreen() {
-//   return (
-//     <AddDeadline/>
-//   )
-// }
-
-// function AddTaskScreen() {
-//   return (
-//     <AddTask/>
-//   )
-// }
-
-// const Stack = createStackNavigator()
-
-// export default function CategoryStack() {
-
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Add Category" component={AddCategory} />
-//       <Stack.Screen name="Add Event" component={AddEventScreen} />
-//       <Stack.Screen name="Add Deadline" component={AddDeadlineScreen} />
-//       <Stack.Screen name="Add Task" component={AddTaskScreen} />
-//     </Stack.Navigator>
-//   )
-// };
-
 
 const styles = StyleSheet.create({
   Input: {
@@ -102,6 +133,15 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: '#979797',
     borderRadius: 8,
+  },
+  longInput: {
+    height: 100,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    borderColor: '#979797',
+    borderRadius: 8,
+    textAlignVertical: 'top', // android top-left align
   },
   Heading: {
     height: 20,

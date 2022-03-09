@@ -5,7 +5,8 @@ import { TouchableOpacity, SafeAreaView, ScrollView, StyleSheet, TextInput, Text
    Dimensions, Image, Platform, LogBox } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Modal from "react-native-modalbox";import { NavigationContainer } from '@react-navigation/native';
+import Modal from "react-native-modalbox";
+import { NavigationContainer } from '@react-navigation/native';
 
 //Required imports for database
 import {useEffect} from "react";
@@ -26,19 +27,20 @@ const AddTask = () => {
   // additional firebase stuff
   const [tasks, setTasks] = useState([]);
   const tasksCollectionRef = collection(db, "Task");
+  const [category, setCategories] = useState([]);
+  const categoryCollectionRef = collection(db, "Category");
 
   // datetimepicker const
   const [mode,setMode]= useState('newDate');
   const [show,setShow]= useState(false);
   const [newDate, setNewDate]= useState(new Date(Date.now()));
   const [dateText,setDateText]= useState('Select Date');
-  const [newStartTime, setNewStartTime] = useState("Start Time")
-  const [newEndTime, setNewEndTime] = useState("Start Time")
+  const [newStartTime, setNewStartTime] = useState("Start Time");
+  const [newEndTime, setNewEndTime] = useState("End Time");
   const [timeType, setTimeType] = useState('');
   const [dateType, setDateType] = useState('');
 
-  // category/reminder const & declaration
-  const categoryList = ["Category1", "Category2", "Category3"];
+  // reminder const & declaration
   const reminderList = ["No Reminder",
     "At time of event",
     "5 minutes before",
@@ -57,9 +59,9 @@ const AddTask = () => {
   const [modalCategoryVisible, setModalCategoryVisible] = useState(false);
   const [modalReminderVisible, setModalReminderVisible] = useState(false);
 
-  let ListCategory=categoryList.map((item,index)=>{
-    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setNewCategory(item);setModalCategoryVisible(false); console.log({item})}}> 
-        <Text style={{ fontSize: 14 }}>{item}</Text>
+  let ListCategory=category.map((category)=>{
+    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setNewCategory(category.Name);setModalCategoryVisible(false); console.log(category.Name)}}> 
+        <Text style={{ fontSize: 14 }}>{category.Name}</Text>
   </TouchableOpacity>
   })
 
@@ -139,12 +141,9 @@ const AddTask = () => {
   const createTask = async () => {
     await addDoc(tasksCollectionRef,
         {
-            Name: newName, 
-            // Category: newCategory,
             // taskID: newTaskID,
+            Name: newName, 
             Location: newLocation,
-            // startTime: newStartTime,
-            // endTime: newEndTime,
             date: dateText,
             Reminder: newReminder,
             Remarks: newRemarks,
@@ -164,9 +163,16 @@ const AddTask = () => {
       setTasks(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
 
+    const getCategories = async () => {
+      const data = await getDocs(categoryCollectionRef);
+      setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+
     setInterval(() => {
       getTasks();
+      getCategories();
       console.log(getTasks);
+      console.log(getCategories);
     }, 1800)
   },[]);
 
@@ -210,12 +216,11 @@ const AddTask = () => {
           Category:
         </Text>
 
-          <TouchableOpacity 
+        <TouchableOpacity 
           style={{height: 25, backgroundColor: '#C4C4C4', borderRadius: 5, margin: 11, justifyContent: 'center'}} 
           onPress={() => setModalCategoryVisible(true)}>
             {newCategory==''?<Text>  Select Category</Text>:<Text>  {newCategory}</Text>}
-          </TouchableOpacity>
-          {/* {getModalCategory()} */}
+        </TouchableOpacity>
 
         <Text
           style={styles.Heading}>
@@ -256,14 +261,12 @@ const AddTask = () => {
           return (
             <NavigationContainer independent={true}>
                 <Text>
+                    {/* taskID: {task.taskID}, */}
                     Name: {task.Name},
                     Location: {task.Location},
-                    {/* startTime: {task.startTime}, */}
-                    {/* endTime: {task.endTime}, */}
                     Category: {task.Category},
                     Reminder: {task.Reminder},
                     Remarks: {task.Remarks},
-                    {/* taskID: {task.taskID}, */}
                     Date: {task.date} {/* date must be small letter not Date!*/}
                 </Text>
 
@@ -291,7 +294,6 @@ const AddTask = () => {
           )}
         {getModalCategory()}
         {getModalReminder()}
-
     </View>
   );
 };

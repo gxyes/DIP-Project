@@ -25,15 +25,7 @@ function AddComponents( {navigation} ) {
   return (
 
     <SafeAreaView>
-      {/* <View>
-        <Text
-          style={styles.Title}>
-          Adding Components
-        </Text>
-      </View> */}
       <View style={styles.HeaderBorder}/>
-
-      {/* content */}
 
       <TouchableOpacity onPress={() => navigation.navigate("Add Category")}>
         <Text style={styles.AddPagesHeader}>+ Add Category</Text>
@@ -52,7 +44,6 @@ function AddComponents( {navigation} ) {
       <TouchableOpacity onPress={() => navigation.navigate("Add Deadline")}>
         <Text style={styles.AddPagesHeader}>+ Add Deadline</Text>
       </TouchableOpacity>
-      {/* <Button onPress={() => navigation.navigate("Add Deadline")} title="Add Deadline" /> */}
       <View style={styles.AddPagesBorder}/>
 
       <TouchableOpacity onPress={() => navigation.navigate("Add Task")}>
@@ -84,7 +75,7 @@ function AddTaskScreen() {
 
 function AddCategoryScreen() {
   return (
-    <AddComponents/>
+    <AddCategory/>
   )
 }
 
@@ -95,7 +86,7 @@ export default function ComponentStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Add Components" component={AddComponents} />
-      <Stack.Screen name="Add Category" component={AddCategory} />
+      <Stack.Screen name="Add Category" component={AddCategoryScreen} />
       <Stack.Screen name="Add Event" component={AddEventScreen} />
       <Stack.Screen name="Add Deadline" component={AddDeadlineScreen} />
       <Stack.Screen name="Add Task" component={AddTaskScreen} />
