@@ -1,3 +1,4 @@
+import { StatusBar } from 'expo-status-bar';
 import * as React from 'react'
 import { Component } from 'react'
 import {
@@ -81,7 +82,7 @@ function MeScreen({ navigation, route }) {
                     source={{uri: selectedImage.localUri}}/>:<Image style={styles.avatar}
                 source={require("../assets/avatar_1.png")}/>}
  
-              <View style={{marginLeft:10,marginTop:15, flexShrink:1}}>
+              <View style={{marginLeft:10,marginTop:15, flexShrink:1, flexGrow:1, marginRight:10}}>
                 <Text style={[styles.name,{marginBottom:10}]}>{userName}</Text>
                 <Text style={styles.userInfo1}> {userInfo1} </Text>
                 <Text style={styles.userInfo2}> {userInfo2} </Text>
