@@ -12,7 +12,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import {useEffect} from "react";
 import {db} from './firebase_config';
 import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
-import { useNavigation } from '@react-navigation/native';
 
 // ignore warning for constantly refreshing view
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
@@ -176,7 +175,6 @@ const AddEvent = () => {
       console.log(getEvents);
     }, 8000)
   },[]);
-  const navigation = useNavigation();
 
   return (
     <View style={{flex:1}}>
@@ -276,7 +274,7 @@ const AddEvent = () => {
           multiline={true}
         />
 
-        <TouchableOpacity style={styles.saveButton} onPress={() => {createEvent; navigation.navigate('Add Components')}}>
+        <TouchableOpacity style={styles.saveButton} onPress={createEvent}>
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>
 
