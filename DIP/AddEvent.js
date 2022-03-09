@@ -173,7 +173,6 @@ const AddEvent = () => {
       getEvents();
       getCategories();
       console.log(getEvents);
-      console.log(getCategories);
     }, 8000)
   },[]);
 
