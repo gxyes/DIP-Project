@@ -172,7 +172,6 @@ const AddTask = () => {
       getTasks();
       getCategories();
       console.log(getTasks);
-      console.log(getCategories);
     }, 8000)
   },[]);
 

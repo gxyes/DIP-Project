@@ -172,7 +172,6 @@ const AddDeadline = () => {
       getDeadlines();
       getCategories();
       console.log(getDeadlines);
-      console.log(getCategories);
     }, 8000)
   },[]);
 
