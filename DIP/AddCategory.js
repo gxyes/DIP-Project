@@ -59,7 +59,7 @@ const AddCategory = () => {
     setInterval(() => {
       getCategories();
       console.log(getCategories);
-    }, 1800)
+    }, 8000)
   },[]);
 
   return (

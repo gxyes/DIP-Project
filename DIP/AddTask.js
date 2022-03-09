@@ -173,7 +173,7 @@ const AddTask = () => {
       getCategories();
       console.log(getTasks);
       console.log(getCategories);
-    }, 1800)
+    }, 8000)
   },[]);
 
 
