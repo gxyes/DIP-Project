@@ -174,7 +174,7 @@ const AddEvent = () => {
       getCategories();
       console.log(getEvents);
       console.log(getCategories);
-    }, 1800)
+    }, 8000)
   },[]);
 
   return (
