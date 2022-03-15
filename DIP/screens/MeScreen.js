@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import * as React from 'react'
-import { Component } from 'react'
+// import * as React from 'react'
+import { Component, useState, useEffect } from 'react'
 import {
     StyleSheet,
     Text,
@@ -11,15 +11,20 @@ import {
     Dimensions,
     TextInput,
     ImageBackground,
+    Button,
   } from 'react-native';
-  
+
+import Modal from "react-native-modalbox";
+
 import * as ImagePicker from 'expo-image-picker';
 import {LineChart} from "react-native-chart-kit";
 import { render } from 'react-dom';
 import { createStackNavigator } from "@react-navigation/stack";
 
+import Login from './LoginScreen'
 
-  
+
+//data visualisation const
 const screenWidth = Dimensions.get("window").width;
 const data = {
     labels: ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"],
@@ -53,12 +58,16 @@ const data = {
   const tasksCompleted = 20
 
 function MeScreen({ navigation, route }) {
-    const [selectedImage, setSelectedImage] = React.useState(null);
-    const [userName, setUserName] = React.useState('Joyce Tan');
-    const [userInfo1, setUserInfo1] = React.useState('NTU IEM year 3 Student');
-    const [userInfo2, setUserInfo2] = React.useState('DIP Project');
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [userName, setUserName] = useState('Joyce Tan');
+    const [userInfo1, setUserInfo1] = useState('NTU IEM year 3 Student');
+    const [userInfo2, setUserInfo2] = useState('DIP Project');
 
-    React.useEffect(() => {
+    //login const
+    const [modalLoginVisible, setModalLoginVisible] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    useEffect(() => {
       if (route.params?.newName) {
         setUserName(route.params.newName)
       };
@@ -72,8 +81,35 @@ function MeScreen({ navigation, route }) {
         setSelectedImage(route.params.selectedImage)
       }
     }, [route.params?.newName]);
-  
+    
+    const getModalLogin = () =>{
+      return (
+        
+        <Modal
+          entry="bottom"
+          position="center"
+          backdropPressToClose={true}
+          isOpen={modalLoginVisible}
+          style={styles.modalBox}
+          onClosed={() => setModalLoginVisible(false)}
+        >
+          <View style={styles.content}> 
+            <Text style={{fontSize:17, alignSelf:'center'}}> Confirm Log Out?</Text>          
+            <View style ={styles.modalButtons}> 
+            <TouchableOpacity style={{padding:15, paddingTop:20}} onPress={() => navigation.push("Login Screen")}>
+              <Text style={{fontSize:16, color:'#6568A6'}}>Log Out</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{padding:15, paddingTop:20}} onPress={() => setModalLoginVisible(false)}>
+              <Text style={{fontSize:16, color:'#C4C4C4'}}>Cancel</Text>
+            </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      );
+    };
+
     return (
+      <View style={{flex:1}}>
         <SafeAreaView style={styles.container}>
           <View style={styles.userInfoSection}>
             <View style={{flexDirection:'row',marginTop:10, flexGrow:1}}>
@@ -89,8 +125,19 @@ function MeScreen({ navigation, route }) {
                 <TouchableOpacity onPress={() => navigation.navigate("Edit Profile",{ userName,userInfo1,userInfo2, selectedImage})} style={styles.button}>
                   <Image style={styles.icon} source={{uri: "https://img.icons8.com/color-glass/48/000000/pencil.png"}}/>
                   <Text style={styles.info}> Edit </Text>
-              </TouchableOpacity>
+                </TouchableOpacity>
               </View>
+              <TouchableOpacity onPress= {() => setModalLoginVisible(true)}>
+                <Image
+                    source={require('../assets/settings.png')}
+                    resizeMode='contain'
+                    style={{
+                        width:45,
+                        height:25,
+                        // tintColor: '#a9c7c8'
+                    }}
+                  />
+              </TouchableOpacity>
               
             </View>
           </View>
@@ -119,6 +166,8 @@ function MeScreen({ navigation, route }) {
         </View>
    
       </SafeAreaView>
+      {getModalLogin()}
+      </View>
     )
 };
 
@@ -126,10 +175,10 @@ function EditProfileScreen({route, navigation}) {
   const user = route.params.userName;
   const info1 = route.params.userInfo1;
   const info2 = route.params.userInfo2;
-  const [selectedImage, setSelectedImage] = React.useState(route.params.selectedImage);
-  const [newName, setNewName] = React.useState('');
-  const [newInfo1, setNewInfo1] = React.useState('');
-  const [newInfo2, setNewInfo2] = React.useState('');
+  const [selectedImage, setSelectedImage] = useState(route.params.selectedImage);
+  const [newName, setNewName] = useState('');
+  const [newInfo1, setNewInfo1] = useState('');
+  const [newInfo2, setNewInfo2] = useState('');
   let openImagePickerAsync = async () => {
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -213,7 +262,11 @@ function EditProfileScreen({route, navigation}) {
     </SafeAreaView>
     )
 };
-
+function LoginScreen({route, navigation}) {
+  return(
+  <Login/>
+  )
+};
 const Stack = createStackNavigator()
 export default function ComponentStack({route: {params}}) {
 
@@ -221,6 +274,7 @@ export default function ComponentStack({route: {params}}) {
     <Stack.Navigator initialRouteName = 'Me Screen'>
       <Stack.Screen name="Me Screen" component={MeScreen} />
       <Stack.Screen name="Edit Profile" component={EditProfileScreen} initialParams={params} />
+      <Stack.Screen options={{ headerShown: false }}name="Login Screen" component={LoginScreen} />
     </Stack.Navigator>
   )
 };
@@ -257,6 +311,15 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems:"center",
       paddingTop: Platform.OS ===  "android" ? StatusBar.currentHeight:0
+    },
+    content: {
+      height: 130,
+      width:250,
+      borderRadius: 15,
+      justifyContent: "center",
+      paddingLeft: 15,
+      backgroundColor: "white"
+      // width:80,height:50,justifyContent:'center',
     },
     editAvatar: {
       alignItems: 'center',
@@ -304,6 +367,16 @@ const styles = StyleSheet.create({
     },
     item:{
       flexDirection : 'row',
+    },
+    modalBox: {
+      overflow: "hidden",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "transparent",
+    },
+    modalButtons:{
+      flexDirection: 'row',
+      alignSelf: 'center',
     },
     name:{
       fontSize:22,
