@@ -7,20 +7,20 @@ import { createStackNavigator } from "@react-navigation/stack";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from "react-native-modalbox";
 import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 //Required imports for database
 import {useEffect} from "react";
 import {db} from './firebase_config';
 import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
-import { useNavigation } from '@react-navigation/native';
-
 
 // ignore warning for constantly refreshing view
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
+const AddCategory = () => {
+  // navigation const
+  const navigation = useNavigation();
 
-
-function AddCategory(){
   // base const
   const [newName, setNewName] = useState("");
   const [newAddInfo, setNewAddInfo] = useState("");
@@ -64,8 +64,7 @@ function AddCategory(){
       console.log(getCategories);
     }, 8000)
   },[]);
-  
-  const navigation = useNavigation();
+
   return (
     <View style={{flex:1}}>
       <SafeAreaView>
@@ -102,20 +101,19 @@ function AddCategory(){
             keyboardType="default"
           />
 
-          <TouchableOpacity style={styles.saveButton} onPress={() => {createCategory; navigation.navigate('Add Components')}} >
+          <TouchableOpacity style={styles.saveButton} onPress={()=>{createCategory(); navigation.navigate("Add Components");}}>
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
 
           {category.map((category) => {
               return (
                 <NavigationContainer independent={true}>
-                  <View style={{marginLeft:15}}> 
-                    <Text> 
+                    <Text>
                         Name: {category.Name},
                         Additional Info: {category.AddInfo},
                       {/* categortID: {category.categoryID}, */}
                     </Text>
-                  </View>
+
                     <Button
                     onPress={() => deleteCategory(category.id)}
                     title= "Delete Category"
@@ -129,7 +127,6 @@ function AddCategory(){
   </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   Input: {

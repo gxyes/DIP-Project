@@ -7,12 +7,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from "react-native-modalbox";
 import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 //Required imports for database
 import {useEffect} from "react";
 import {db} from './firebase_config';
 import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
-import { useNavigation } from '@react-navigation/native';
 
 // ignore warning for constantly refreshing view
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
@@ -23,6 +23,9 @@ const AddEvent = () => {
   const [newRemarks, setNewRemarks] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [newReminder, setNewReminder] = useState("");
+
+  // navigation const
+  const navigation = useNavigation();
 
   // additional firebase stuff
   const [event, setEvents] = useState([]);
@@ -36,7 +39,7 @@ const AddEvent = () => {
   const [newDate, setNewDate]= useState(new Date(Date.now()));
   const [dateText,setDateText]= useState('Select Date');
   const [newStartTime, setNewStartTime] = useState("Start Time")
-  const [newEndTime, setNewEndTime] = useState("Start Time")
+  const [newEndTime, setNewEndTime] = useState("End Time")
   const [timeType, setTimeType] = useState('');
   const [dateType, setDateType] = useState('');
   
@@ -176,7 +179,6 @@ const AddEvent = () => {
       console.log(getEvents);
     }, 8000)
   },[]);
-  const navigation = useNavigation();
 
   return (
     <View style={{flex:1}}>
@@ -241,7 +243,17 @@ const AddEvent = () => {
             </TouchableOpacity>
           </View>
         </View>
-
+        {show && (
+        <DateTimePicker
+        testID='dateTimePicker'
+        value={newDate}
+        mode = {mode}
+        is24Hour = {true}
+        display='default'
+        onChange={onChange}
+        style= {{marginRight:15}}
+        />
+      )}
         <Text
           style={styles.Heading}>
           Category:
@@ -276,10 +288,10 @@ const AddEvent = () => {
           multiline={true}
         />
 
-        <TouchableOpacity style={styles.saveButton} onPress={() => {createEvent; navigation.navigate('Add Components')}}>
+        <TouchableOpacity style={styles.saveButton} onPress={()=>{createEvent();navigation.navigate("Add Components");}}>
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>
-
+        
         {event.map((event) => {
           return (
             <NavigationContainer independent={true}>
@@ -306,16 +318,7 @@ const AddEvent = () => {
 
         </ScrollView>
       </SafeAreaView>
-      {show && (
-        <DateTimePicker
-        testID='dateTimePicker'
-        value={newDate}
-        mode = {mode}
-        is24Hour = {true}
-        display='default'
-        onChange={onChange}
-        />
-      )}
+     
       {getModalCategory()}
      {getModalReminder()}
     </View>
