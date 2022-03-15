@@ -7,6 +7,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from "react-native-modalbox";
 import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 //Required imports for database
 import {useEffect} from "react";
@@ -21,6 +22,9 @@ const AddDeadline = () => {
   const [newRemarks, setNewRemarks] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [newReminder, setNewReminder] = useState("");
+
+  // navigation const
+  const navigation = useNavigation();
 
   // additional firebase stuff
   const [deadline, setDeadlines] = useState([]);
@@ -218,7 +222,17 @@ const AddDeadline = () => {
         onPress={()=>{ setTimeType("Date"); showMode('date')} }>
           <Text>  {dateText}</Text>
         </TouchableOpacity>
-        
+        {show && (
+          <DateTimePicker
+          testID='dateTimePicker'
+          value={newDate}
+          mode = {mode}
+          is24Hour = {true}
+          display='default'
+          onChange={onChange}
+          style={{marginRight:15}}
+          />
+      )}
         <Text
           style={styles.Heading}>
           Reminder:
@@ -242,7 +256,7 @@ const AddDeadline = () => {
           multiline={true}
         />
 
-        <TouchableOpacity style={styles.saveButton} onPress={createDeadline}>
+        <TouchableOpacity style={styles.saveButton} onPress={()=>{createDeadline(); navigation.navigate("Add Components");}}>
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>
 
@@ -269,16 +283,7 @@ const AddDeadline = () => {
 
         </ScrollView>
       </SafeAreaView>
-      {show && (
-          <DateTimePicker
-          testID='dateTimePicker'
-          value={newDate}
-          mode = {mode}
-          is24Hour = {true}
-          display='default'
-          onChange={onChange}
-          />
-      )}
+      
       {getModalCategory()}
       {getModalReminder()}
     </View>

@@ -7,6 +7,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from "react-native-modalbox";
 import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 //Required imports for database
 import {useEffect} from "react";
@@ -17,6 +18,8 @@ import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 const AddCategory = () => {
+  // navigation const
+  const navigation = useNavigation();
 
   // base const
   const [newName, setNewName] = useState("");
@@ -98,7 +101,7 @@ const AddCategory = () => {
             keyboardType="default"
           />
 
-          <TouchableOpacity style={styles.saveButton} onPress={createCategory}>
+          <TouchableOpacity style={styles.saveButton} onPress={()=>{createCategory(); navigation.navigate("Add Components");}}>
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
 
