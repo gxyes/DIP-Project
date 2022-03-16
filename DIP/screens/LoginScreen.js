@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { SafeAreaView, ScrollView, Text, Button, TextInput, StyleSheet, LogBox, View , 
-       TouchableOpacity,
+       TouchableOpacity, Alert,
         } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from "@react-navigation/stack";
@@ -10,7 +10,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import {useState, useEffect} from "react";
 import {db} from '../firebase_config';
 import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
-
+// import { registration } from '../API/firebaseMethods';
 // import auth
 // import auth from "@react-native-firebase/auth"
 
@@ -18,8 +18,8 @@ LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 // ignore warning for constantly refreshing view
 
 function LoginScreen({navigation}) {
-  const [username, setUsername]= useState("")
-  const [password, setPassword]= useState("")
+  const [Lemail, setLEmail]= useState("")
+  const [Lpassword, setLPassword]= useState("")
   return (
     <SafeAreaView>
       <View>
@@ -31,14 +31,15 @@ function LoginScreen({navigation}) {
       <View style={styles.e_HeaderBorder}/>        
       <Text
         style={styles.e_Heading}>
-        Username:
+        Email:
       </Text>
       <TextInput
         style={styles.e_Input}
-        onChangeText={setUsername}
-        value={username}
-        placeholder='Username'
-        keyboardType="default"
+        onChangeText={setLEmail}
+        value={Lemail}
+        placeholder='Email'
+        keyboardType='email-address'
+        autoCapitalize='none'
       />
       <Text
         style={styles.e_Heading}>
@@ -47,8 +48,8 @@ function LoginScreen({navigation}) {
       <TextInput
         secureTextEntry={true}
         style={styles.e_Input}
-        onChangeText={setPassword}
-        value={password}
+        onChangeText={setLPassword}
+        value={Lpassword}
         placeholder='Password'
         keyboardType="default"
       />
@@ -70,19 +71,44 @@ function LoginScreen({navigation}) {
 }
 
 function SignUpScreen({navigation}) {
-  const [newUsername, setNewUsername]= useState("")
-  const [newPassword, setNewPassword]= useState("")
-  const [newEmail, setNewEmail]= useState("")
-  // const __doCreateUser = async (email, password) =>{
-  //   try {
-  //    let response =  await auth().createUserWithEmailAndPassword(email, password);
-  //     if(response){
-  //       console.log(tag,"?",response)
-  //     }
-  //   } catch (e) {
-  //     console.error(e.message);
-  //   }
-  // }
+  const [firstName, setFirstName]= useState("")
+  const [lastName, setLastName]= useState("")
+  const [password, setPassword]= useState("")
+  const [confirmPassword, setConfirmPassword]= useState("")
+  const [email, setEmail]= useState("")
+  
+  const emptyState = () => {
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+  };
+
+  const handlePress = () => {
+    if (!firstName) {
+      Alert.alert('First name is required');
+    } else if (!email) {
+      Alert.alert('Email field is required.');
+    } else if (!password) {
+      Alert.alert('Password field is required.');
+    } else if (!confirmPassword) {
+      setPassword('');
+      Alert.alert('Confirm password field is required.');
+    } else if (password !== confirmPassword) {
+      Alert.alert('Password does not match!');
+    } else {
+      registration(
+        email,
+        password,
+        lastName,
+        firstName,
+      );
+      // navigation.navigate('Loading');
+      console.log('Loading...')
+      emptyState();
+    }
+  };
   return (
     <SafeAreaView>
       <View>
@@ -94,13 +120,24 @@ function SignUpScreen({navigation}) {
       <View style={styles.e_HeaderBorder}/>        
       <Text
         style={styles.e_Heading}>
-        Username:
+        First Name:
       </Text>
       <TextInput
         style={styles.e_Input}
-        onChangeText={setNewUsername}
-        value={newUsername}
-        placeholder='Username'
+        onChangeText={setFirstName}
+        value={firstName}
+        placeholder='First Name'
+        keyboardType="default"
+      />
+      <Text
+        style={styles.e_Heading}>
+        Last Name:
+      </Text>
+      <TextInput
+        style={styles.e_Input}
+        onChangeText={setLastName}
+        value={lastName}
+        placeholder='Last Name'
         keyboardType="default"
       />
       <Text
@@ -109,10 +146,11 @@ function SignUpScreen({navigation}) {
       </Text>
       <TextInput
         style={styles.e_Input}
-        onChangeText={setNewEmail}
-        value={newEmail}
+        onChangeText={setEmail}
+        value={email}
         placeholder='Email'
         keyboardType='email-address'
+        autoCapitalize='none'
       />
       <Text
         style={styles.e_Heading}>
@@ -121,14 +159,26 @@ function SignUpScreen({navigation}) {
       <TextInput
         secureTextEntry={true}
         style={styles.e_Input}
-        onChangeText={setNewPassword}
-        value={newPassword}
-        placeholder='Password'
+        onChangeText={setPassword}
+        value={password}
+        placeholder='Enter your Password'
+        keyboardType="default"
+      />
+      <Text
+        style={styles.e_Heading}>
+        Confirm Password:
+      </Text>
+      <TextInput
+        secureTextEntry={true}
+        style={styles.e_Input}
+        onChangeText={setConfirmPassword}
+        value={confirmPassword}
+        placeholder='Re-enter your Password to Confirm'
         keyboardType="default"
       />
       <TouchableOpacity onPress={() => {
           // Pass and merge params back to home screen
-          navigation.push('Me Screen')}} style={styles.e_saveButton}>
+          handlePress()}} style={styles.e_saveButton}>
         <Text style={styles.e_saveButtonText}>Sign Up</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{alignItems:"center"}} onPress={() => {navigation.navigate('Login Screen')}} >
