@@ -90,10 +90,15 @@ const AddEvent = () => {
         style={styles.modalBox}
         onClosed={() => setModalCategoryVisible(false)}
       >
-        <View style={styles.content}>            
-          {ListCategory}
-          <Button title='x Close' color={'#6568A6'} onPress={() => setModalCategoryVisible(false)} />
-        </View>
+        <View style={{flex:1}}>
+          <ScrollView style={styles.modalScrollCategory}>            
+            {ListCategory}
+            {/* <Button title='x Close' color={'#6568A6'} onPress={() => setModalCategoryVisible(false)} /> */}
+            <TouchableOpacity style={styles.closeButtonStyle} onPress={() => setModalCategoryVisible(false)}>
+              <Text style={styles.closeButtonText}>x Close</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View> 
       </Modal>
     );
   };
@@ -111,10 +116,10 @@ const AddEvent = () => {
         onPress={() => setModalReminderVisible(false)}
       >
         <View style={{flex:1}}>
-          <ScrollView style={styles.modalScroll}> 
+          <ScrollView style={styles.modalScrollReminder}> 
             {ListReminders}
             <TouchableOpacity style={styles.closeButtonStyle} onPress={() => setModalReminderVisible(false)}>
-              <Text style={{ color: '#6568A6'}}>x Close</Text>
+              <Text style={styles.closeButtonText}>x Close</Text>
             </TouchableOpacity> 
           </ScrollView>
         </View>
@@ -399,8 +404,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "transparent",
   },
-  modalScroll:{
+  modalScrollReminder:{
     marginTop: 300,
+    overflow: "hidden",
+    textAlign: "left",
+    // alignItems:"center",
+    borderTopLeftRadius:15,
+    borderTopRightRadius:15,
+    paddingLeft:15,
+    paddingBottom:15,
+    flex: 1,
+    height: 'auto',
+    backgroundColor: "white"
+  },
+  modalScrollCategory:{
+    marginTop: 550,
+    // marginBottom: 100,
     overflow: "hidden",
     textAlign: "left",
     // alignItems:"center",
@@ -422,7 +441,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     paddingLeft: 15,
     borderTopRightRadius: 15,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   textStyle: {
     fontSize: 22
@@ -436,12 +455,26 @@ const styles = StyleSheet.create({
     padding: 10,
     minWidth: '100%'
   },
-  closeButtonStyle:{
-    alignItems: 'flex-start',
-    color: '#6568A6',
+  // closeButtonStyle:{
+  //   alignItems: 'flex-start',
+  //   color: '#6568A6',
+  //   fontSize: 16,
+  //   //fontWeight: "bold",
+  //   padding: 10,
+  // },
+  closeButtonStyle: {
+    marginRight: 15,
+    marginTop: 15, 
+    marginBottom: 30,
+    height: 35,
+    backgroundColor: '#5F5DA6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+  },
+  closeButtonText: {
     fontSize: 16,
-    //fontWeight: "bold",
-    padding: 10,
+    color: '#fff'
   },
   scrollView: {
     // flex: 1,
