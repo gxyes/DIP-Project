@@ -155,15 +155,15 @@ import {collection, getDocs, doc} from 'firebase/firestore';
 // ];
 
 export default function App() {
-  const [tasks, setTasks] = useState([]);
-  const tasksCollectionRef = collection(db, "Display");
+  const [event, setEvent] = useState([]);
+  const eventsCollectionRef = collection(db, "Event");
   useEffect(() => {
-      const getTasks = async () => {
-        const data = await getDocs(tasksCollectionRef);
-        setTasks(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      const getEvent = async () => {
+        const data = await getDocs(eventsCollectionRef);
+        setEvent(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       };
-      getTasks();
-      console.log(getTasks);
+      getEvent();
+      console.log(getEvent);
     },[]);
   return (
     <SafeAreaProvider>
@@ -172,7 +172,7 @@ export default function App() {
         <View style={styles.container}>
           <TimeTable
             // eventGroups={eventGroups}
-            events={tasks}
+            events={event}
             eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
           />
         </View>

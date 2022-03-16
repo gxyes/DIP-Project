@@ -42,6 +42,7 @@ const AddEvent = () => {
   const [newEndTime, setNewEndTime] = useState("End Time")
   const [timeType, setTimeType] = useState('');
   const [dateType, setDateType] = useState('');
+  const [newDay, setDay] = useState('');
   
   // reminder const & declaration
   const reminderList = ["No Reminder",
@@ -134,6 +135,8 @@ const AddEvent = () => {
     let fDate = tempDate.getDate()+'/'+(tempDate.getMonth()+1)+'/'+tempDate.getFullYear();
     let fTime = tempDate.getHours() + ':' + tempDate.getMinutes();
     // setDateText(fDate);
+    let dayOfWeek = tempDate.getDay();
+    setDay(dayOfWeek);
     {timeType == 'Date' ? setDateText(fDate) : null};
     {timeType == 'Start' ? setNewStartTime(fTime) : null};
     {timeType == 'End' ? setNewEndTime(fTime) : null};
@@ -144,15 +147,15 @@ const AddEvent = () => {
   const createEvent = async () => {
     await addDoc(eventCollectionRef,
         {
-            Name: newName, 
+            courseId: newName, 
             // eventID: newEventID,
-            Location: newLocation,
+            location: newLocation,
             startTime: newStartTime,
             endTime: newEndTime,
-            date: dateText,
+            day: newDay,
             Reminder: newReminder,
             Remarks: newRemarks,
-            Category: newCategory
+            section: newCategory
         }
         );
   };
@@ -297,14 +300,14 @@ const AddEvent = () => {
             <NavigationContainer independent={true}>
                 <Text>
                     {/* eventID: {event.eventID}, */}
-                    Name: {event.Name},
-                    Location: {event.Location},
+                    courseId: {event.courseId},
+                    location: {event.location},
                     startTime: {event.startTime},
                     endTime: {event.endTime},
-                    Category: {event.Category},
+                    section: {event.section},
                     Reminder: {event.Reminder},
                     Remarks: {event.Remarks},
-                    Date: {event.date} {/* date must be small letter not Date!*/}
+                    day: {event.day}
                 </Text>
 
                 <Button
