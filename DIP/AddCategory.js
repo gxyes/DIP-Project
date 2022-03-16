@@ -17,6 +17,11 @@ import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
 // ignore warning for constantly refreshing view
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
+function random_rgba() {
+  var o = Math.round, r = Math.random, s = 255;
+  return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+}
+
 const AddCategory = () => {
   // navigation const
   const navigation = useNavigation();
@@ -38,12 +43,16 @@ const AddCategory = () => {
   const [newEndTime, setNewEndTime] = useState("Start Time")
   const [timeType, setTimeType] = useState('');
   const [dateType, setDateType] = useState('');
+  // const [catColor, setCatColor] = useState('');
+
+  const catColor = random_rgba();
 
   const createCategory = async () => {
     await addDoc(categoryCollectionRef,
         {
             Name: newName, 
             AddInfo: newAddInfo,
+            color: catColor,
         }
         );
   };
@@ -111,6 +120,7 @@ const AddCategory = () => {
                     <Text>
                         Name: {category.Name},
                         Additional Info: {category.AddInfo},
+                        color: {category.color}
                       {/* categortID: {category.categoryID}, */}
                     </Text>
 
