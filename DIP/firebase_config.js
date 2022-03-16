@@ -1,6 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import {getFirestore} from "@firebase/firestore"
+import {getAuth, createUserWithEmailAndPassword} from "firebase/auth"
 
 // Your web app's Firebase configuration
 // Jessie database
@@ -27,4 +28,5 @@ const firebaseConfig = {
 
   // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const authentication = getAuth(app)
 export const db = getFirestore(app);

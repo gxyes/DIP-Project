@@ -8,8 +8,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 //Required imports for database
 import {useState, useEffect} from "react";
-import {db} from '../firebase_config';
+import {db, authentication} from '../firebase_config';
 import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth"
+
 // import { registration } from '../API/firebaseMethods';
 // import auth
 // import auth from "@react-native-firebase/auth"
@@ -20,6 +22,27 @@ LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 function LoginScreen({navigation}) {
   const [Lemail, setLEmail]= useState("")
   const [Lpassword, setLPassword]= useState("")
+
+  const SignIn = ()=>{
+    signInWithEmailAndPassword(authentication, Lemail, Lpassword)
+    .then((re)=>{
+      // set sign in status
+      // setIsSignedIn(true);
+      navigation.push('Me Screen');
+      console.log(re);
+    })
+    .catch((re)=>{
+      console.log(re);
+      Alert.alert(errorcode);
+    })
+    .catch((err)=>{
+      
+      console.log(err);
+      const c=err.code
+      Alert.alert('Invalid email or password!',c);
+    })
+  }
+
   return (
     <SafeAreaView>
       <View>
@@ -53,12 +76,7 @@ function LoginScreen({navigation}) {
         placeholder='Password'
         keyboardType="default"
       />
-      <TouchableOpacity onPress={() => {
-          // Pass and merge params back to home screen
-          navigation.push('Me Screen'
-            // params: { newName, newInfo1, newInfo2, selectedImage },
-            // merge: true,
-          )}} style={styles.e_saveButton}>
+      <TouchableOpacity onPress={() => {SignIn()}} style={styles.e_saveButton}>
         <Text style={styles.e_saveButtonText}>Login</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{alignItems:"center"}} onPress={() => {navigation.navigate('SignUp Screen')}} >
@@ -84,6 +102,15 @@ function SignUpScreen({navigation}) {
     setPassword('');
     setConfirmPassword('');
   };
+  const registerUser = () => {
+    createUserWithEmailAndPassword(authentication, email, password)
+    .then((re)=>{
+      console.log(re);
+    })
+    .catch((re)=>{
+      console.log(re);
+    })
+  }
 
   const handlePress = () => {
     if (!firstName) {
@@ -92,20 +119,23 @@ function SignUpScreen({navigation}) {
       Alert.alert('Email field is required.');
     } else if (!password) {
       Alert.alert('Password field is required.');
-    } else if (!confirmPassword) {
+    } else if (!password) {
+      Alert.alert('Password field is required.');
+    } else if (password.length<6) {
       setPassword('');
-      Alert.alert('Confirm password field is required.');
+      Alert.alert('Password should be at least 6 characters.');
     } else if (password !== confirmPassword) {
       Alert.alert('Password does not match!');
     } else {
-      registration(
-        email,
-        password,
-        lastName,
-        firstName,
-      );
+      //add to db
+      registerUser();
+      // registration(
+      //   email,
+      //   password,
+      //   lastName,
+      //   firstName,
+      // );
       // navigation.navigate('Loading');
-      console.log('Loading...')
       emptyState();
     }
   };

@@ -23,6 +23,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Login from './LoginScreen'
 
+//imports for db
+import {db, authentication} from '../firebase_config';
+import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
+import { signOut} from "firebase/auth"
+
 
 //data visualisation const
 const screenWidth = Dimensions.get("window").width;
@@ -67,6 +72,18 @@ function MeScreen({ navigation, route }) {
     const [modalLoginVisible, setModalLoginVisible] = useState(false);
     const [loggedIn, setLoggedIn] = useState(false);
 
+    //sign out const
+    const SignOutUser = ()=>{
+      signOut(authentication)
+      .then((re)=>{
+        setLoggedIn(false);
+        console.log("logged out.")
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
+    }
+
     useEffect(() => {
       if (route.params?.newName) {
         setUserName(route.params.newName)
@@ -96,7 +113,7 @@ function MeScreen({ navigation, route }) {
           <View style={styles.content}> 
             <Text style={{fontSize:17, alignSelf:'center'}}> Confirm Log Out?</Text>          
             <View style ={styles.modalButtons}> 
-            <TouchableOpacity style={{padding:15, paddingTop:20}} onPress={() => navigation.push("Login Screen")}>
+            <TouchableOpacity style={{padding:15, paddingTop:20}} onPress={() => {SignOutUser(); navigation.push("Login Screen")}}>
               <Text style={{fontSize:16, color:'#6568A6'}}>Log Out</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{padding:15, paddingTop:20}} onPress={() => setModalLoginVisible(false)}>
