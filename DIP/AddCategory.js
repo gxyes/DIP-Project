@@ -58,11 +58,8 @@ const AddCategory = () => {
       const data = await getDocs(categoryCollectionRef);
       setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
-
-    setInterval(() => {
       getCategories();
       console.log(getCategories);
-    }, 8000)
   },[]);
 
   return (

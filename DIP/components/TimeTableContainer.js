@@ -162,8 +162,10 @@ export default function App() {
         const data = await getDocs(eventsCollectionRef);
         setEvent(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       };
-      getEvent();
-      console.log(getEvent);
+      setInterval(() => {
+        getEvent();
+        console.log(getEvent);
+      }, 5000)
     },[]);
   return (
     <SafeAreaProvider>

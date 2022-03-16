@@ -171,12 +171,9 @@ const AddDeadline = () => {
       const data = await getDocs(categoryCollectionRef);
       setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
-
-    setInterval(() => {
       getDeadlines();
       getCategories();
       console.log(getDeadlines);
-    }, 8000)
   },[]);
 
 

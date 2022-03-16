@@ -171,12 +171,9 @@ const AddTask = () => {
       const data = await getDocs(categoryCollectionRef);
       setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
-
-    setInterval(() => {
       getTasks();
       getCategories();
       console.log(getTasks);
-    }, 8000)
   },[]);
 
 

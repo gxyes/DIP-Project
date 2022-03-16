@@ -175,12 +175,9 @@ const AddEvent = () => {
       const data = await getDocs(categoryCollectionRef);
       setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
-
-    setInterval(() => {
       getEvents();
       getCategories();
       console.log(getEvents);
-    }, 8000)
   },[]);
 
   return (
