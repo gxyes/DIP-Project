@@ -43,6 +43,7 @@ const AddEvent = () => {
   const [timeType, setTimeType] = useState('');
   const [dateType, setDateType] = useState('');
   const [newDay, setDay] = useState('');
+  const [eventColor, setEventColor] = useState('');
   
   // reminder const & declaration
   const reminderList = ["No Reminder",
@@ -64,7 +65,7 @@ const AddEvent = () => {
   const [modalReminderVisible, setModalReminderVisible] = useState(false);
 
   let ListCategory=category.map((category)=>{
-    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setNewCategory(category.Name);setModalCategoryVisible(false); console.log(category.Name)}}> 
+    return <TouchableOpacity style={styles.buttonStyle} onPress={() => { setNewCategory(category.Name); setEventColor(category.color); setModalCategoryVisible(false); console.log(category.Name)}}> 
         <Text style={{ fontSize: 14 }}>{category.Name}</Text>
   </TouchableOpacity>
   })
@@ -148,14 +149,14 @@ const AddEvent = () => {
     await addDoc(eventCollectionRef,
         {
             courseId: newName, 
-            // eventID: newEventID,
             location: newLocation,
             startTime: newStartTime,
             endTime: newEndTime,
             day: newDay,
             Reminder: newReminder,
             Remarks: newRemarks,
-            section: newCategory
+            section: newCategory,
+            color: eventColor,
         }
         );
   };
