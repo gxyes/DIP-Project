@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { AppRegistry, StyleSheet, StatusBar, Button, View, Text } from "react-native";
+import { AppRegistry, StyleSheet, StatusBar, Button, View, Text, Image, ImageBackground } from "react-native";
 import { GameEngine } from "react-native-game-engine";
 import { Finger, ImgAvatar1, ImgAvatar7 } from "./renderers";
 import { Avatar } from "./renderers";
@@ -24,33 +24,35 @@ export default class BestGameEver extends PureComponent {
   
 
   render() {
-    return (
-      <GameEngine
-        style={styles.container}
-        systems={[updatePostion]}
-        entities={{
-          1: { position: [50,50], renderer: <ImgAvatar7 />}, //-- Notice that each entity has a unique id (required)
-          2: { position: [100, 200], renderer: <ImgAvatar1 />}, //-- and a renderer property (optional). If no renderer
-          //3: { position: [160, 200], renderer: <Finger />}, //-- is supplied with the entity - it won't get displayed.
-          //4: { position: [220, 200], renderer: <Finger />},
-          //5: { position: [280, 200], renderer: <Finger />}
-        }}>
+    return (      
+      <View style={styles.container}>
+        <ImageBackground
+          style={{justifyContent: 'center', width:400, height:1000, flex:1}}
+          resizeMode="cover"
+          source={require('../assets/background_checkpoint.png')}>
+       <GameEngine
+          style={styles.container}
+          systems={[updatePostion]}
+          entities={{
+            1: { position: [50,50], renderer: <ImgAvatar7 />}, //-- Notice that each entity has a unique id (required)
+            2: { position: [100, 200], renderer: <ImgAvatar1 />}, //-- and a renderer property (optional). If no renderer
+            //3: { position: [160, 200], renderer: <Finger />}, //-- is supplied with the entity - it won't get displayed.
+            //4: { position: [220, 200], renderer: <Finger />},
+            //5: { position: [280, 200], renderer: <Finger />}
+          }}>
+        </GameEngine>
+        <StatusBar hidden={true} />  
 
-        <StatusBar hidden={true} />
-
-     
-      
-      <View>
         <Text style={styles.title}>
           Update Avatar position
         </Text>
-       <Button
-        title="Press me"
-        onPress={this.updatePostion1}
-        />
+        <Button
+          title="Press me"
+          onPress={this.updatePostion1}
+          />
+          </ImageBackground>
       </View>
 
-      </GameEngine>
     );
   }
 
