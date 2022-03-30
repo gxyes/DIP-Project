@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { SafeAreaView, ScrollView, Text, Button, TextInput, StyleSheet, LogBox, View , 
-       TouchableOpacity,
+       TouchableOpacity, Alert,
         } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from "@react-navigation/stack";
@@ -8,9 +8,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 //Required imports for database
 import {useState, useEffect} from "react";
-import {db} from '../firebase_config';
+import {db, authentication} from '../firebase_config';
 import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, getAuth, onAuthStateChanged} from "firebase/auth"
 
+// import { registration } from '../API/firebaseMethods';
 // import auth
 // import auth from "@react-native-firebase/auth"
 
@@ -18,8 +20,29 @@ LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 // ignore warning for constantly refreshing view
 
 function LoginScreen({navigation}) {
-  const [username, setUsername]= useState("")
-  const [password, setPassword]= useState("")
+  const [Lemail, setLEmail]= useState("")
+  const [Lpassword, setLPassword]= useState("")
+
+  const SignIn = ()=>{
+    signInWithEmailAndPassword(authentication, Lemail, Lpassword)
+    .then((re)=>{
+      // set sign in status
+      // setIsSignedIn(true);
+      navigation.push('Me Screen');
+      console.log(re);
+    })
+    .catch((re)=>{
+      console.log(re);
+      Alert.alert(errorcode);
+    })
+    .catch((err)=>{
+      
+      console.log(err);
+      const c=err.code
+      Alert.alert('Invalid email or password!',c);
+    })
+  }
+
   return (
     <SafeAreaView>
       <View>
@@ -31,14 +54,15 @@ function LoginScreen({navigation}) {
       <View style={styles.e_HeaderBorder}/>        
       <Text
         style={styles.e_Heading}>
-        Username:
+        Email:
       </Text>
       <TextInput
         style={styles.e_Input}
-        onChangeText={setUsername}
-        value={username}
-        placeholder='Username'
-        keyboardType="default"
+        onChangeText={setLEmail}
+        value={Lemail}
+        placeholder='Email'
+        keyboardType='email-address'
+        autoCapitalize='none'
       />
       <Text
         style={styles.e_Heading}>
@@ -47,17 +71,12 @@ function LoginScreen({navigation}) {
       <TextInput
         secureTextEntry={true}
         style={styles.e_Input}
-        onChangeText={setPassword}
-        value={password}
+        onChangeText={setLPassword}
+        value={Lpassword}
         placeholder='Password'
         keyboardType="default"
       />
-      <TouchableOpacity onPress={() => {
-          // Pass and merge params back to home screen
-          navigation.push('Me Screen'
-            // params: { newName, newInfo1, newInfo2, selectedImage },
-            // merge: true,
-          )}} style={styles.e_saveButton}>
+      <TouchableOpacity onPress={() => {SignIn()}} style={styles.e_saveButton}>
         <Text style={styles.e_saveButtonText}>Login</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{alignItems:"center"}} onPress={() => {navigation.navigate('SignUp Screen')}} >
@@ -73,16 +92,84 @@ function SignUpScreen({navigation}) {
   const [newUsername, setNewUsername]= useState("")
   const [newPassword, setNewPassword]= useState("")
   const [newEmail, setNewEmail]= useState("")
-  // const __doCreateUser = async (email, password) =>{
-  //   try {
-  //    let response =  await auth().createUserWithEmailAndPassword(email, password);
-  //     if(response){
-  //       console.log(tag,"?",response)
-  //     }
-  //   } catch (e) {
-  //     console.error(e.message);
-  //   }
-  // }
+  const userDetailsCollectionRef = collection(db, "UserDetails");
+  const [confirmPassword, setConfirmPassword]= useState("")
+  
+  const emptyState = () => {
+    setNewUsername('');
+    setNewPassword('');
+    setNewEmail('');
+    setConfirmPassword('');
+  };
+  const registerUser = () => {
+    createUserWithEmailAndPassword(authentication, newEmail, newPassword)
+    .then((re)=>{
+      console.log(re);
+    })
+    .catch((re)=>{
+      console.log(re);
+    })
+  }
+  const createProfile = async () => {
+    await addDoc(userDetailsCollectionRef,
+        {
+            Email: newEmail, 
+            FirstName: newUsername,
+            Password: newPassword,
+        }
+        );
+    setUserProfile();
+  };
+
+  const setUserProfile = () => {
+    const auth = getAuth();
+    setNewUsername(firstName+' '+lastName)
+    // dName = firstName;
+    console.log(username)
+    updateProfile(auth.currentUser, {
+      displayName: username , 
+    }).then((re) => {
+      console.log(re)
+      // Profile updated!
+      // ...
+    }).catch((error) => {
+      // An error occurred
+      // ...
+    });
+  }
+  const handlePress = () => {
+    if (!newUsername) {
+      Alert.alert('First name is required');
+    } else if (!newEmail) {
+      Alert.alert('Email field is required.');
+    } else if (!newPassword) {
+      Alert.alert('Password field is required.');
+    } else if (newPassword.length<6) {
+      setPassword('');
+      Alert.alert('Password should be at least 6 characters.');
+    } else if (newPassword !== confirmPassword) {
+      Alert.alert('Password does not match!');
+    } else {
+      //add to db
+      registerUser();
+      // registration(
+      //   email,
+      //   password,
+      //   lastName,
+      //   firstName,
+      // );
+      // navigation.navigate('Loading');
+      onAuthStateChanged(authentication, (user) => {
+        if (user) {
+          createProfile();
+          navigation.push('Me Screen');
+          emptyState();
+        } else {
+          // User is signed out
+          // ...
+        }
+      });    }
+  };
   return (
     <SafeAreaView>
       <View>
@@ -113,6 +200,7 @@ function SignUpScreen({navigation}) {
         value={newEmail}
         placeholder='Email'
         keyboardType='email-address'
+        autoCapitalize='none'
       />
       <Text
         style={styles.e_Heading}>
@@ -123,12 +211,24 @@ function SignUpScreen({navigation}) {
         style={styles.e_Input}
         onChangeText={setNewPassword}
         value={newPassword}
-        placeholder='Password'
+        placeholder='Enter your Password'
+        keyboardType="default"
+      />
+      <Text
+        style={styles.e_Heading}>
+        Confirm Password:
+      </Text>
+      <TextInput
+        secureTextEntry={true}
+        style={styles.e_Input}
+        onChangeText={setConfirmPassword}
+        value={confirmPassword}
+        placeholder='Re-enter your Password to Confirm'
         keyboardType="default"
       />
       <TouchableOpacity onPress={() => {
           // Pass and merge params back to home screen
-          navigation.push('Me Screen')}} style={styles.e_saveButton}>
+          handlePress()}} style={styles.e_saveButton}>
         <Text style={styles.e_saveButtonText}>Sign Up</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{alignItems:"center"}} onPress={() => {navigation.navigate('Login Screen')}} >
