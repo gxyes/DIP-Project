@@ -10,7 +10,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import {useState, useEffect} from "react";
 import {db, authentication} from '../firebase_config';
 import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, getAuth, onAuthStateChanged} from "firebase/auth"
 
 // import { registration } from '../API/firebaseMethods';
 // import auth
@@ -89,21 +89,20 @@ function LoginScreen({navigation}) {
 }
 
 function SignUpScreen({navigation}) {
-  const [firstName, setFirstName]= useState("")
-  const [lastName, setLastName]= useState("")
-  const [password, setPassword]= useState("")
+  const [newUsername, setNewUsername]= useState("")
+  const [newPassword, setNewPassword]= useState("")
+  const [newEmail, setNewEmail]= useState("")
+  const userDetailsCollectionRef = collection(db, "UserDetails");
   const [confirmPassword, setConfirmPassword]= useState("")
-  const [email, setEmail]= useState("")
   
   const emptyState = () => {
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPassword('');
+    setNewUsername('');
+    setNewPassword('');
+    setNewEmail('');
     setConfirmPassword('');
   };
   const registerUser = () => {
-    createUserWithEmailAndPassword(authentication, email, password)
+    createUserWithEmailAndPassword(authentication, newEmail, newPassword)
     .then((re)=>{
       console.log(re);
     })
@@ -111,20 +110,44 @@ function SignUpScreen({navigation}) {
       console.log(re);
     })
   }
+  const createProfile = async () => {
+    await addDoc(userDetailsCollectionRef,
+        {
+            Email: newEmail, 
+            FirstName: newUsername,
+            Password: newPassword,
+        }
+        );
+    setUserProfile();
+  };
 
+  const setUserProfile = () => {
+    const auth = getAuth();
+    setNewUsername(firstName+' '+lastName)
+    // dName = firstName;
+    console.log(username)
+    updateProfile(auth.currentUser, {
+      displayName: username , 
+    }).then((re) => {
+      console.log(re)
+      // Profile updated!
+      // ...
+    }).catch((error) => {
+      // An error occurred
+      // ...
+    });
+  }
   const handlePress = () => {
-    if (!firstName) {
+    if (!newUsername) {
       Alert.alert('First name is required');
-    } else if (!email) {
+    } else if (!newEmail) {
       Alert.alert('Email field is required.');
-    } else if (!password) {
+    } else if (!newPassword) {
       Alert.alert('Password field is required.');
-    } else if (!password) {
-      Alert.alert('Password field is required.');
-    } else if (password.length<6) {
+    } else if (newPassword.length<6) {
       setPassword('');
       Alert.alert('Password should be at least 6 characters.');
-    } else if (password !== confirmPassword) {
+    } else if (newPassword !== confirmPassword) {
       Alert.alert('Password does not match!');
     } else {
       //add to db
@@ -136,8 +159,16 @@ function SignUpScreen({navigation}) {
       //   firstName,
       // );
       // navigation.navigate('Loading');
-      emptyState();
-    }
+      onAuthStateChanged(authentication, (user) => {
+        if (user) {
+          createProfile();
+          navigation.push('Me Screen');
+          emptyState();
+        } else {
+          // User is signed out
+          // ...
+        }
+      });    }
   };
   return (
     <SafeAreaView>
@@ -150,24 +181,13 @@ function SignUpScreen({navigation}) {
       <View style={styles.e_HeaderBorder}/>        
       <Text
         style={styles.e_Heading}>
-        First Name:
+        Username:
       </Text>
       <TextInput
         style={styles.e_Input}
-        onChangeText={setFirstName}
-        value={firstName}
-        placeholder='First Name'
-        keyboardType="default"
-      />
-      <Text
-        style={styles.e_Heading}>
-        Last Name:
-      </Text>
-      <TextInput
-        style={styles.e_Input}
-        onChangeText={setLastName}
-        value={lastName}
-        placeholder='Last Name'
+        onChangeText={setNewUsername}
+        value={newUsername}
+        placeholder='Username'
         keyboardType="default"
       />
       <Text
@@ -176,8 +196,8 @@ function SignUpScreen({navigation}) {
       </Text>
       <TextInput
         style={styles.e_Input}
-        onChangeText={setEmail}
-        value={email}
+        onChangeText={setNewEmail}
+        value={newEmail}
         placeholder='Email'
         keyboardType='email-address'
         autoCapitalize='none'
@@ -189,8 +209,8 @@ function SignUpScreen({navigation}) {
       <TextInput
         secureTextEntry={true}
         style={styles.e_Input}
-        onChangeText={setPassword}
-        value={password}
+        onChangeText={setNewPassword}
+        value={newPassword}
         placeholder='Enter your Password'
         keyboardType="default"
       />
