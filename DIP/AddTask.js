@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 //Required imports for database
 import {useEffect} from "react";
 import {db} from './firebase_config';
-import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
+import {collection, getDocs, addDoc, doc, deleteDoc, updateDoc} from 'firebase/firestore';
 
 // ignore warning for constantly refreshing view
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
@@ -24,6 +24,7 @@ const AddTask = () => {
   const [newRemarks, setNewRemarks] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [newReminder, setNewReminder] = useState("");
+  const [completedStatus, setCompletedStatus] = useState(false);
 
   // navigation const
   const navigation = useNavigation();
@@ -156,15 +157,28 @@ const AddTask = () => {
             date: dateText,
             Reminder: newReminder,
             Remarks: newRemarks,
-            Category: newCategory
+            Category: newCategory,
+            completed: completedStatus,
         }
         );
   };
   
   const deleteTask = async (id) =>{
       const taskDoc = doc(db, "Task", id);
-      await deleteDoc(taskDoc)
-  }
+      await deleteDoc(taskDoc);
+  };
+
+  const updateTaskCheck = async (id, completed) => {
+    const completedDoc = doc(db, "Task", id);
+    const newFields = {completed: true};
+    await updateDoc(completedDoc, newFields);
+  };
+
+  const updateTaskUncheck = async (id, completed) => {
+    const completedDoc = doc(db, "Task", id);
+    const newFields = {completed: false};
+    await updateDoc(completedDoc, newFields);
+  };
 
   useEffect(() => {
     const getTasks = async () => {
@@ -278,16 +292,24 @@ const AddTask = () => {
         {tasks.map((task) => {
           return (
             <NavigationContainer independent={true}>
-                <Text>
+                <Text style={task.completed == true ? styles.strikethrough : null}>
                     {/* taskID: {task.taskID}, */}
                     Name: {task.Name},
                     Location: {task.Location},
                     Category: {task.Category},
                     Reminder: {task.Reminder},
                     Remarks: {task.Remarks},
-                    Date: {task.date} {/* date must be small letter not Date!*/}
+                    Date: {task.date}, {/* date must be small letter not Date!*/}
+                    completed: {task.completed}
                 </Text>
 
+                <Button
+                onPress={() => {task.completed == false ? updateTaskCheck(task.id, task.completed) 
+                  : updateTaskUncheck(task.id, task.completed)}}
+                  title = {task.completed == false ? "Check" : "Uncheck"}
+                >
+                </Button>
+                
                 <Button
                 onPress={() => deleteTask(task.id)}
                 title= "Delete Task"
@@ -470,7 +492,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   posttext:{
-    textAlign:'center'
+    textAlign:'center',
+  },
+  strikethrough: {
+    textDecorationLine: 'line-through',
   }
 });
 
