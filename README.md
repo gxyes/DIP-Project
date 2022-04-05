@@ -15,3 +15,4 @@ After you download the file, please run **yarn install** first, this will let yo
 | Chart            |                                                      | ProfilePage                                               | npm install react-native-chart-kit                                                                   |
 | React Navigation | https://reactnavigation.org/docs/stack-navigator     | AddComponents.js, AddEvent.js, AddDeadline.js, AddTask.js | npm install @react-navigation/native @react-navigation/stack                                         |
 | Modalbox         | https://www.npmjs.com/package/react-native-modalbox  | AddEvent.js, AddDeadline.js, AddTask.js                   | npm install react-native-modalbox                                                                    |
+| ConfettiCannon         | https://www.npmjs.com/package/react-native-confetti-cannon  | GameScreen.js |yarn add react-native-confetti-cannon |
