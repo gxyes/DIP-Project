@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View, Image } from "react-native";
+import ConfettiCannon from 'react-native-confetti-cannon';
 import "./Globals"
  
 const RADIUS = 20
@@ -52,6 +53,21 @@ class ImgAvatar1 extends PureComponent {
   }
 }
 
+class Firework extends PureComponent {
+  render() {
+    return(
+      // <View style={styles.Firework}>
+      <React.Fragment>
+          <ConfettiCannon
+            count={200} 
+            origin={{x: 200, y: -100}}
+          >
+          </ConfettiCannon>
+      </React.Fragment>
+      // </View>
+    )
+  }
+}
 
 
 const styles = StyleSheet.create({
@@ -69,6 +85,11 @@ const styles = StyleSheet.create({
   },
   ImgAvatar7: {
     position: "absolute"
+  },
+  Firework: {
+    // position: "fixed",
+    // zIndex: 10,  
+    zIndex:999
   }
 });
 
@@ -78,3 +99,4 @@ export { Finger };
 export { Avatar };
 export { ImgAvatar7 };
 export { ImgAvatar1 };
+export {Firework};

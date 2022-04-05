@@ -1,6 +1,8 @@
 import "./Globals"
+import { Firework } from "./renderers";
+import ConfettiCannon from 'react-native-confetti-cannon';
 
-  let numbers = 1;
+let numbers = 1;
 const MoveFinger = (entities, { touches }) => {
 
   //-- I'm choosing to update the game state (entities) directly for the sake of brevity and simplicity.
@@ -37,7 +39,6 @@ const MoveAvatar = (entities, { touches }) => {
   return entities;
 };
 
-
 function updatePostion(entities) {
   let imgAvatar = entities[numbers];
   // top = imgAvatar.position[1];
@@ -46,13 +47,17 @@ function updatePostion(entities) {
     imgAvatar.position = [
       global.left, global.top
     ];
+    entities[3] = {}
+  }
+  if (global.left == 300 && global.top == 300) {
+    entities[3] = { position: [0, 0], renderer: <Firework/>}
+    entities[3].position = [
+      global.firework, global.firework
+    ];
   }
   return entities;
 }
+
 export {updatePostion};
-
-
 export { MoveFinger };
 export { MoveAvatar };
-
-

@@ -1,12 +1,11 @@
 import React, { PureComponent } from "react";
 import { AppRegistry, StyleSheet, StatusBar, Button, View, Text, Image, ImageBackground } from "react-native";
 import { GameEngine } from "react-native-game-engine";
-import { Finger, ImgAvatar1, ImgAvatar7 } from "./renderers";
+import { Finger, ImgAvatar1, ImgAvatar7, Firework } from "./renderers";
 import { Avatar } from "./renderers";
 import { ImgAvatar, } from "./renderers";
-import { MoveAvatar, MoveFinger, updatePostion, imgAvatar } from "./systems";
+import { MoveAvatar, MoveFinger, updatePostion, imgAvatar, triggerFirework } from "./systems";
 import "./Globals";
-import ConfettiCannon from 'react-native-confetti-cannon';
 
 export default class BestGameEver extends PureComponent {
   constructor() {
@@ -78,7 +77,6 @@ export default class BestGameEver extends PureComponent {
           resizeMode="cover"
           source={require('../assets/background_checkpoint.png')}>
           <GameEngine
-            style={styles.container}
             systems={[updatePostion]}
             entities={{
               1: { position: [50,50], renderer: <ImgAvatar7 />}, //-- Notice that each entity has a unique id (required)
@@ -86,21 +84,11 @@ export default class BestGameEver extends PureComponent {
             }}>
           </GameEngine>
 
-        
-        {/* <React.Fragment>
-          <ConfettiCannon
-            count={200} 
-            origin={{x: -10, y: 0}}
-          >
-          </ConfettiCannon>
-        </React.Fragment> */}
-
-
           <StatusBar hidden={true} />  
 
-          <Text style={styles.title}>
+          {/* <Text style={styles.title}>
             Update Avatar position
-          </Text>
+          </Text> */}
           <Button
             title="Press me"
             onPress={this.updatePostion1}
@@ -118,7 +106,6 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    paddingTop: 600,
     marginVertical: 8,
   }
 });
