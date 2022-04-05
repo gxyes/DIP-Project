@@ -1,6 +1,8 @@
 import * as React from 'react'
-import { ScrollView, Text, Button, TextInput, StyleSheet, LogBox, View  } from 'react-native'
+import { ScrollView, Text, Button, TextInput, StyleSheet, LogBox, View,TouchableOpacity,StatusBar, Linking  } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome';
 
 //Required imports for database
 import {useState, useEffect} from "react";
@@ -11,10 +13,111 @@ LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 // ignore warning for constantly refreshing view
 
 function HabitsScreen() {
+
+  const [Quote, setQuote] = useState('Loading...');
+  const [Author, setAuthor] = useState('Loading...');
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  const randomQuote = () => {
+    setIsLoading(true);
+    fetch("https://api.quotable.io/random").then(res => res.json()).then(result => {
+      //console.log(result.content);
+      setQuote(result.content);
+      setAuthor(result.author);
+      setIsLoading(false);
+    })
+  }
+
+  useEffect(() => {
+    randomQuote();
+  }, []);
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#9597BF',
+      }}>
+      <StatusBar barStyle="light-content" />
+      <View
+        style={{
+          width: '90%',
+          backgroundColor: '#fff',
+          borderRadius: 20,
+          padding: 20,
+        }}>
+       <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 26,
+            fontWeight: '600',
+            color: '#333',
+            marginBottom: 20,
+          }}>
+          Quote of the Day
+        </Text>
+
+        <FontAwesome5
+          name="quote-left"
+          style={{fontSize: 20, marginBottom: -12}}
+          color="#000"
+        />
+
         <Text
-            style={{ fontSize: 26, fontWeight: 'bold' }}>Habit Screen</Text>
+          style={{
+            color: '#000',
+            fontSize: 16,
+            lineHeight: 26,
+            letterSpacing: 1.1,
+            fontWeight: '400',
+            textAlign: 'center',
+            marginBottom: 10,
+            paddingHorizontal: 30,
+          }}>
+          {Quote}
+        </Text>
+
+        <FontAwesome5
+          name="quote-right"
+          style={{
+            fontSize: 20,
+            textAlign: 'right',
+            marginTop: -20,
+            marginBottom: 20,
+          }}
+          color="#000"
+        />
+
+
+        <Text
+          style={{
+            textAlign: 'right',
+            fontWeight: '300',
+            fontStyle: 'italic',
+            fontSize: 16,
+            color: '#000',
+          }}>
+          ——{Author}
+        </Text>
+
+
+        <TouchableOpacity
+          onPress={randomQuote}
+          style={{
+            backgroundColor: '#5F5DA6',
+            padding: 20,
+            borderRadius: 30,
+            marginVertical: 20,
+          }}>
+          <Text style={{color: '#fff', fontSize: 18, textAlign: 'center'}}>
+            New Quote
+          </Text>
+        </TouchableOpacity>
+
+    </View>
     </View>
 )
 }

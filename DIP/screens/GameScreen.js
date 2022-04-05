@@ -6,6 +6,7 @@ import { Avatar } from "./renderers";
 import { ImgAvatar, } from "./renderers";
 import { MoveAvatar, MoveFinger, updatePostion, imgAvatar } from "./systems";
 import "./Globals";
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 export default class BestGameEver extends PureComponent {
   constructor() {
@@ -13,15 +14,61 @@ export default class BestGameEver extends PureComponent {
   }
 
   updatePostion1 = () => {
-    
-    global.top += 10;
-    global.left += 10;
+    if(global.count <= global.progress/10){
+      switch(global.count){
+        case 0: //update the position of avatar according to accordinates
+          global.left = 200; 
+          global.top = 100;
+          break;
+        case 1:
+          global.left = 50; 
+          global.top = 0;
+          break;
+        case 2:
+          global.left = 300;
+          global.top = 300;
+          break;
+        case 3: //update the position of avatar according to accordinates
+          global.left = 200; 
+          global.top = 100;
+          break;
+        case 4:
+          global.left = 50; 
+          global.top = 0;
+          break;
+        case 5:
+          global.left = 300;
+          global.top = 300;
+          break;
+        case 6: //update the position of avatar according to accordinates
+          global.left = 200; 
+          global.top = 100;
+          break;
+        case 7:
+          global.left = 50; 
+          global.top = 0;
+          break;
+        case 8:
+          global.left = 300;
+          global.top = 300;
+          break;
+        case 9:
+          global.left = 300;
+          global.top = 300;
+          break;
+        case 10:
+          global.left = 300;
+          global.top = 300;
+          break;
+      }
+      global.count++;
+    }
 
     console.log("top:" + global.top);
     console.log("left:" + global.left);
-    updatePostion;
- }
-  
+    console.log("progress: " + global.progress);
+    console.log("count: " + global.count);
+  }
 
   render() {
     return (      
@@ -30,33 +77,38 @@ export default class BestGameEver extends PureComponent {
           style={{justifyContent: 'center', width:400, height:1000, flex:1}}
           resizeMode="cover"
           source={require('../assets/background_checkpoint.png')}>
-       <GameEngine
-          style={styles.container}
-          systems={[updatePostion]}
-          entities={{
-            1: { position: [50,50], renderer: <ImgAvatar7 />}, //-- Notice that each entity has a unique id (required)
-            2: { position: [100, 200], renderer: <ImgAvatar1 />}, //-- and a renderer property (optional). If no renderer
-            //3: { position: [160, 200], renderer: <Finger />}, //-- is supplied with the entity - it won't get displayed.
-            //4: { position: [220, 200], renderer: <Finger />},
-            //5: { position: [280, 200], renderer: <Finger />}
-          }}>
-        </GameEngine>
-        <StatusBar hidden={true} />  
+          <GameEngine
+            style={styles.container}
+            systems={[updatePostion]}
+            entities={{
+              1: { position: [50,50], renderer: <ImgAvatar7 />}, //-- Notice that each entity has a unique id (required)
+              2: { position: [100, 200], renderer: <ImgAvatar1 />}, //-- and a renderer property (optional). If no renderer
+            }}>
+          </GameEngine>
 
-        <Text style={styles.title}>
-          Update Avatar position
-        </Text>
-        <Button
-          title="Press me"
-          onPress={this.updatePostion1}
+        
+        {/* <React.Fragment>
+          <ConfettiCannon
+            count={200} 
+            origin={{x: -10, y: 0}}
+          >
+          </ConfettiCannon>
+        </React.Fragment> */}
+
+
+          <StatusBar hidden={true} />  
+
+          <Text style={styles.title}>
+            Update Avatar position
+          </Text>
+          <Button
+            title="Press me"
+            onPress={this.updatePostion1}
           />
-          </ImageBackground>
+        </ImageBackground>
       </View>
-
     );
   }
-
-  
 }
 
 const styles = StyleSheet.create({
