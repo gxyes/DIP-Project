@@ -28,45 +28,33 @@ import {db, authentication} from '../firebase_config';
 import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
 import { signOut} from "firebase/auth"
 
+const chartConfig = {
+  backgroundColor: '#FFFFFF',
+  backgroundGradientFrom: "#FFFFFF",
+  backgroundGradientFromOpacity: 0.1,
+  backgroundGradientTo: "#FFFFFF",
+  backgroundGradientToOpacity: 0.7,
+  fillShadowGradientFrom: "#FF7B00",
+  fillShadowGradientFromOpacity: 0.2,
+  fillShadowGradientTo: "#FFFFFF",
+  fillShadowGradientToOpacity: 0,
+  color: (opacity = 0.5) => `rgba(255, 123, 0, ${opacity})`,
+  strokeWidth: 2, // optional, default 3
+  labelColor:(opacity = 0.1) => "#ffb46e",
+  barPercentage: 0.5,
+  decimalPlaces: 1,
+  useShadowColorFromDataset: false // optional
+};
 
-//data visualisation const
 const screenWidth = Dimensions.get("window").width;
-const data = {
-    labels: ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"],
-    datasets: [
-      {
-        data: [2, 0, 4.5, 6, 1, 3, 2],
-        color: (opacity = 1) => '#FF7B00', // optional
-        // color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-        strokeWidth: 2 // optional
-      }
-    ],
-    // legend: ["Rainy Days"] // optional
-  };
-  const chartConfig = {
-    backgroundColor: '#FFFFFF',
-    backgroundGradientFrom: "#FFFFFF",
-    backgroundGradientFromOpacity: 0.1,
-    backgroundGradientTo: "#FFFFFF",
-    backgroundGradientToOpacity: 0.7,
-    fillShadowGradientFrom: "#FF7B00",
-    fillShadowGradientFromOpacity: 0.2,
-    fillShadowGradientTo: "#FFFFFF",
-    fillShadowGradientToOpacity: 0,
-    color: (opacity = 0.5) => `rgba(255, 123, 0, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    labelColor:(opacity = 0.1) => "#ffb46e",
-    barPercentage: 0.5,
-    decimalPlaces: 1,
-    useShadowColorFromDataset: false // optional
-  };
-  const tasksCompleted = 20
 
 function MeScreen({ navigation, route }) {
     const [selectedImage, setSelectedImage] = useState(null);
     const [userName, setUserName] = useState('Joyce Tan');
     const [userInfo1, setUserInfo1] = useState('NTU IEM year 3 Student');
     const [userInfo2, setUserInfo2] = useState('DIP Project');
+    const [weekArray, setWeekArray] = useState([2, 0, 4,1,2,3,4]);
+    const [weekTotal, setWeekTotal] = useState(0);
 
     //login const
     const [modalLoginVisible, setModalLoginVisible] = useState(false);
@@ -83,6 +71,47 @@ function MeScreen({ navigation, route }) {
         console.log(err);
       })
     }
+
+    const [charts, setChart] = useState([]);
+    const chartCollectionRef = collection(db, "Chart");
+    useEffect(() => {
+      const getChart = async () => {
+        const data =  await getDocs(chartCollectionRef);
+        setChart(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      };
+        getChart();
+        console.log(charts);
+        console.log(weekTotal);
+        console.log(weekArray);
+        console.log("displaying chart");
+        
+        {charts.map((chart) => {
+          return (
+            setWeekArray(chart.week),
+            setWeekTotal(chart.weekTotal)
+          );
+        })}
+
+
+    },[]);
+
+    ///////////////////////////////////////////////////////
+    // CAN READ FROM DB BUT NOT READING FAST ENOUGH     ///
+    // NEED TO FIND A WAY TO GET BELOW FUNCTIONS TO WAIT///
+    ///////////////////////////////////////////////////////
+
+    const data = {
+        labels: ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"],
+
+        datasets: [
+          {
+            data: weekArray,
+            color: (opacity = 1) => '#FF7B00', // optional
+            strokeWidth: 2 // optional
+          }
+        ],
+      };
+
 
     useEffect(() => {
       if (route.params?.newName) {
@@ -164,7 +193,7 @@ function MeScreen({ navigation, route }) {
               <TouchableOpacity style={styles.touchableStyle}>
                 <Text style={styles.textStyle}>
                   Total Task Completed:   
-                  <Text style={styles.boldText}>  {tasksCompleted}  </Text>
+                  <Text style={styles.boldText}>  {weekTotal}  </Text>
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.touchableStyle}>
