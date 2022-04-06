@@ -56,7 +56,6 @@ class ImgAvatar1 extends PureComponent {
 class Firework extends PureComponent {
   render() {
     return(
-      // <View style={styles.Firework}>
       <React.Fragment>
           <ConfettiCannon
             count={200} 
@@ -64,7 +63,6 @@ class Firework extends PureComponent {
           >
           </ConfettiCannon>
       </React.Fragment>
-      // </View>
     )
   }
 }
@@ -86,11 +84,6 @@ const styles = StyleSheet.create({
   ImgAvatar7: {
     position: "absolute"
   },
-  Firework: {
-    // position: "fixed",
-    // zIndex: 10,  
-    zIndex:999
-  }
 });
 
 

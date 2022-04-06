@@ -86,9 +86,6 @@ export default class BestGameEver extends PureComponent {
 
           <StatusBar hidden={true} />  
 
-          {/* <Text style={styles.title}>
-            Update Avatar position
-          </Text> */}
           <Button
             title="Press me"
             onPress={this.updatePostion1}
@@ -104,10 +101,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFF",
   },
-  title: {
-    textAlign: 'center',
-    marginVertical: 8,
-  }
 });
 
 AppRegistry.registerComponent("BestGameEver", () => BestGameEver);
