@@ -52,7 +52,7 @@ export default class BestGameEver extends PureComponent {
           global.left = 270;
           break;
         case 0:
-          global.top = 630;
+          global.top = 610;
           global.left = 230;
           break;
       }

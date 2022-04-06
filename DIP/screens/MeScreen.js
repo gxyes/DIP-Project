@@ -319,8 +319,8 @@ export default function ComponentStack({route: {params}}) {
 
   return (
     <Stack.Navigator initialRouteName = 'Me Screen'>
-      <Stack.Screen name="Me Screen" component={MeScreen} />
-      <Stack.Screen name="Edit Profile" component={EditProfileScreen} initialParams={params} />
+      <Stack.Screen options={{ headerShown: false }} name="Me Screen" component={MeScreen} />
+      <Stack.Screen options={{ headerShown: false }} name="Edit Profile" component={EditProfileScreen} initialParams={params} />
       <Stack.Screen options={{ headerShown: false }}name="Login Screen" component={LoginScreen} />
     </Stack.Navigator>
   )

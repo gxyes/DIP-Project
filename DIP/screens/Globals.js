@@ -1,4 +1,4 @@
-global.top = 630;
+global.top = 610;
 global.left = 230;
 global.progress = 100;
 global.count = 0;

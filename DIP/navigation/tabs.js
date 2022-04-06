@@ -37,10 +37,10 @@ const Tabs = () => {
         <Tab.Navigator
             screenOptions={{
                 "tabBarShowLabel": false,
-                headerShown: false,
+                headerShown: true,
             }}
         >
-            <Tab.Screen name = "Timetable" component={TimetableScreen} options=
+            <Tab.Screen name = "My Calendar" component={TimetableScreen} options=
                 {{
                     tabBarIcon:({focused}) => (
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -61,7 +61,7 @@ const Tabs = () => {
                     )
                 }}
             />
-            <Tab.Screen name = "GameScreen" component={GameScreen}options=
+            <Tab.Screen name = "My Progress" component={GameScreen}options=
                 {{
                     tabBarIcon:({focused}) => (
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -99,7 +99,7 @@ const Tabs = () => {
                     )
                 }}
             />
-            <Tab.Screen name = "HabitsScreen" component={HabitsScreen}options=
+            <Tab.Screen name = "My Daily Motivation" component={HabitsScreen}options=
                 {{
                     tabBarIcon:({focused}) => (
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -114,12 +114,12 @@ const Tabs = () => {
                             />
                             <Text
                                 style={{color:'#a9c7c8', fontSize:12}}>
-                                Habits
+                                Motivation
                             </Text>
                         </View>
                     )
                 }}/>
-            <Tab.Screen name = "MeScreen" component={MeScreen}options=
+            <Tab.Screen name = "My Profile" component={MeScreen}options=
                 {{
                     tabBarIcon:({focused}) => (
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
