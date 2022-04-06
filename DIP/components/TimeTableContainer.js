@@ -20,6 +20,9 @@ export default function App() {
         console.log(getEvent);
       }, 5000)
     },[]);
+
+  const ourTheme = {primary:"#5f5da6", accent:"#ffcf55", text:"rgba(0, 0, 0, 1)", background:"rgba(240, 237, 233, 1)"}
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.safeAreaContainer}>
@@ -29,6 +32,7 @@ export default function App() {
             // eventGroups={event}
             events={event}
             eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
+            theme={ourTheme}
           />
         </View>
       </SafeAreaView>

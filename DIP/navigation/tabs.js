@@ -24,7 +24,7 @@ const PlusButton = ({children,onPress}) => (
                 width:40,
                 height:40,
                 borderRadius:35,
-                backgroundColor: '#8a9f95'
+                backgroundColor: '#ffffff'
             }}
         >
             {children}
@@ -88,9 +88,9 @@ const Tabs = () => {
                             source={require('../assets/plus.png')}
                             resizeMode='contain'
                             style={{
-                                width:30,
-                                height:30,
-                                tintColor:'#a9c7c8',
+                                width:80,
+                                height:80,
+                                // tintColor:'#ffffff',
                             }}
                         />
                     ),

@@ -27,23 +27,24 @@ import Login from './LoginScreen'
 import {db, authentication} from '../firebase_config';
 import {collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore';
 import { signOut} from "firebase/auth"
+import { Spacer } from 'native-base';
 
 const chartConfig = {
-  backgroundColor: '#FFFFFF',
-  backgroundGradientFrom: "#FFFFFF",
+  backgroundColor: '#f0ede9',
+  backgroundGradientFrom: "#f0ede9",
   backgroundGradientFromOpacity: 0.1,
-  backgroundGradientTo: "#FFFFFF",
+  backgroundGradientTo: "#f0ede9",
   backgroundGradientToOpacity: 0.7,
   fillShadowGradientFrom: "#FF7B00",
-  fillShadowGradientFromOpacity: 0.2,
+  fillShadowGradientFromOpacity: 0.6,
   fillShadowGradientTo: "#FFFFFF",
   fillShadowGradientToOpacity: 0,
-  color: (opacity = 0.5) => `rgba(255, 123, 0, ${opacity})`,
+  color: (opacity = 1) => `rgba(255, 123, 0, ${opacity})`,
   strokeWidth: 2, // optional, default 3
-  labelColor:(opacity = 0.1) => "#ffb46e",
-  barPercentage: 0.5,
+  labelColor:(opacity = 1) => "#ffb46e",
+  barPercentage: 1,
   decimalPlaces: 1,
-  useShadowColorFromDataset: false // optional
+  useShadowColorFromDataset: false, // optional
 };
 
 const screenWidth = Dimensions.get("window").width;
@@ -190,13 +191,13 @@ function MeScreen({ navigation, route }) {
 
             <View style={{ flex: 1, alignItems: 'center', paddingTop:20 }}>
             {/* <ScrollView> */}
-              <TouchableOpacity style={styles.touchableStyle}>
+              <TouchableOpacity style={styles.touchableStyle1}>
                 <Text style={styles.textStyle}>
                   Total Task Completed:   
                   <Text style={styles.boldText}>  {weekTotal}  </Text>
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.touchableStyle}>
+              <TouchableOpacity style={styles.touchableStyle2}>
                 <Text style={styles.textStyle}>
                   Your Focus Time (Last Week): {'  '}  
                 </Text>
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
     },
     container: {
       flex: 1,
-      backgroundColor: '#e2e2e2',
+      backgroundColor: '#f0ede9',
       justifyContent: 'center',
       alignItems:"center",
       paddingTop: Platform.OS ===  "android" ? StatusBar.currentHeight:0
@@ -400,7 +401,7 @@ const styles = StyleSheet.create({
       fontSize:16,
       marginTop:20,
       color: "#FFFFFF",
-      backgroundColor: "#9cabba", 
+      backgroundColor: "#6568a6", 
       borderRadius: 10,
       paddingHorizontal:5,
       overflow:"hidden",
@@ -441,14 +442,23 @@ const styles = StyleSheet.create({
       height: 300,
       resizeMode: "contain"
     },
-    touchableStyle:{
+    touchableStyle1:{
       backgroundColor: '#5F5DA6',
       borderRadius:15,
       paddingVertical:5,
       paddingHorizontal:15,
       alignSelf: 'flex-start',
       marginLeft:20,
-      marginBottom:10,
+      marginBottom:20,
+    },
+    touchableStyle2:{
+      backgroundColor: '#5F5DA6',
+      borderRadius:15,
+      paddingVertical:5,
+      paddingHorizontal:15,
+      alignSelf: 'flex-start',
+      marginLeft:20,
+      marginBottom:80,
     },
     userInfo1:{
       fontSize:16,
@@ -461,7 +471,7 @@ const styles = StyleSheet.create({
       fontWeight:'500',
     },
     userInfoSection:{
-      backgroundColor:"#f9f9f9",
+      backgroundColor:"#f0ede9",
       width: screenWidth,
     },
    //edit profile

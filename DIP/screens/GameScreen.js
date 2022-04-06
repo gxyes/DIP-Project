@@ -15,49 +15,45 @@ export default class BestGameEver extends PureComponent {
   updatePostion1 = () => {
     if(global.count <= global.progress/10){
       switch(global.count){
-        case 0: //update the position of avatar according to accordinates
-          global.left = 200; 
-          global.top = 100;
-          break;
-        case 1:
-          global.left = 50; 
-          global.top = 0;
-          break;
-        case 2:
-          global.left = 300;
-          global.top = 300;
-          break;
-        case 3: //update the position of avatar according to accordinates
-          global.left = 200; 
-          global.top = 100;
-          break;
-        case 4:
-          global.left = 50; 
-          global.top = 0;
-          break;
-        case 5:
-          global.left = 300;
-          global.top = 300;
-          break;
-        case 6: //update the position of avatar according to accordinates
-          global.left = 200; 
-          global.top = 100;
-          break;
-        case 7:
-          global.left = 50; 
-          global.top = 0;
+        case 9: //update the position of avatar according to accordinates
+          global.top = 240; 
+          global.left = 120;
           break;
         case 8:
-          global.left = 300;
-          global.top = 300;
+          global.top = 290; 
+          global.left = 90;
           break;
-        case 9:
-          global.left = 300;
-          global.top = 300;
+        case 7:
+          global.top = 340;
+          global.left = 40;
           break;
-        case 10:
-          global.left = 300;
-          global.top = 300;
+        case 6: //update the position of avatar according to accordinates
+          global.top = 380; 
+          global.left = 20;
+          break;
+        case 5:
+          global.top = 440; 
+          global.left = 80;
+          break;
+        case 4:
+          global.top = 470;
+          global.left = 160;
+          break;
+        case 3: //update the position of avatar according to accordinates
+          global.top = 490; 
+          global.left = 220;
+          break;
+        case 2:
+          global.top = 530; 
+          global.left = 290;
+          break;
+        case 1:
+          global.top = 570;
+          global.left = 270;
+          break;
+        case 0:
+          global.top = 630;
+          global.left = 230;
           break;
       }
       global.count++;
@@ -76,6 +72,7 @@ export default class BestGameEver extends PureComponent {
           style={{justifyContent: 'center', width:400, height:1000, flex:1}}
           resizeMode="cover"
           source={require('../assets/background_checkpoint.png')}>
+
           <GameEngine
             systems={[updatePostion]}
             entities={{
@@ -84,7 +81,7 @@ export default class BestGameEver extends PureComponent {
             }}>
           </GameEngine>
 
-          <StatusBar hidden={true} />  
+          <StatusBar hidden={false} barStyle="dark-content"/>
 
           <Button
             title="Press me"

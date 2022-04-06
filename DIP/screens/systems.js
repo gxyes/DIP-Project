@@ -49,7 +49,7 @@ function updatePostion(entities) {
     ];
     entities[3] = {}
   }
-  if (global.left == 300 && global.top == 300) {
+  if ((global.top == 530 && global.left == 290)||(global.top == 470 && global.left == 160)||(global.top == 380 && global.left == 20)||(global.top == 240 && global.left == 120)) {
     entities[3] = { position: [0, 0], renderer: <Firework/>}
     entities[3].position = [
       global.firework, global.firework
