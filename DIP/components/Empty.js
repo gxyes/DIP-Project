@@ -21,6 +21,7 @@ const ComponentContainer = styled.View`
 const EmptyImage = styled.Image`
   width: 220px;
   height: 220px;
+  margin-top: -120px;
 `;
 
 const EmptyText = styled.Text`

@@ -85,11 +85,11 @@ export default function ComponentStack() {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Add Components" component={AddComponents} />
-      <Stack.Screen name="Add Category" component={AddCategoryScreen} />
-      <Stack.Screen name="Add Event" component={AddEventScreen} />
-      <Stack.Screen name="Add Deadline" component={AddDeadlineScreen} />
-      <Stack.Screen name="Add Task" component={AddTaskScreen} />
+      <Stack.Screen options={{ headerShown: false }} name="Add Components" component={AddComponents} />
+      <Stack.Screen options={{ headerShown: false }} name="Add Category" component={AddCategoryScreen} />
+      <Stack.Screen options={{ headerShown: false }} name="Add Event" component={AddEventScreen} />
+      <Stack.Screen options={{ headerShown: false }} name="Add Deadline" component={AddDeadlineScreen} />
+      <Stack.Screen options={{ headerShown: false }} name="Add Task" component={AddTaskScreen} />
     </Stack.Navigator>
   )
 };

@@ -15,8 +15,8 @@ function MyTabs() {
       screenOptions={{
         tabBarActiveTintColor: '#5F5DA6',
         tabBarInactiveTintColor: '#A2A4A7',
-        tabBarLabelStyle: { fontSize: 12},
-        tabBarPressColor: "#A2A4A7",
+        tabBarLabelStyle: { fontSize: 12, fontWeight: "bold"},
+        tabBarPressColor: "#000000",
         tabBarStyle: { backgroundColor: '#BFC3D9' },
       }}
     >
@@ -30,11 +30,11 @@ function MyTabs() {
         component={TodoContainer}
         options={{ tabBarLabel: 'TODO' }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="TodayContainer"
         component={TodayContainer}
         options={{ tabBarLabel: 'Today' }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }

@@ -81,7 +81,7 @@ const Tabs = () => {
                         </View>
                     )
                 }}/>
-            <Tab.Screen name='Plus' component={PlusScreen}
+            <Tab.Screen name='Add' component={PlusScreen}
                 options={{
                     tabBarIcon: ({focused}) => (
                         <Image
