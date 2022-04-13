@@ -7,6 +7,7 @@ By IEM AY2021/2022 DIP Group 1
 some links
 ***
 ![image](https://github.com/DIP-Group1/DIP-Project/blob/master/Reports/group1_poster.png)
+<video src='https://github.com/DIP-Group1/DIP-Project/blob/master/Reports/group1_video.mp4' width=180/>
 
 ### Table of Contents
 some links
