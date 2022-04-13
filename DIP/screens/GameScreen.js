@@ -64,7 +64,7 @@ export default class BestGameEver extends PureComponent {
     console.log("progress: " + global.progress);
     console.log("count: " + global.count);
   }
-  
+
   updatePostion2 = () => {
     if(global.count_2 <= global.progress/10){
       switch(global.count_2){
@@ -137,11 +137,11 @@ export default class BestGameEver extends PureComponent {
           <StatusBar hidden={false} barStyle="dark-content"/>
 
           <Button
-            title="Update Avatar 1"
+            title="                                       "
             onPress={this.updatePostion1}
           />
           <Button
-            title="Update Avatar 2"
+            title="                                        "
             onPress={this.updatePostion2}
           />
         </ImageBackground>
