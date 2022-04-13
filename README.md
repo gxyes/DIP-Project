@@ -7,7 +7,11 @@ By IEM AY2021/2022 DIP Group 1
 some links
 ***
 ![image](https://github.com/DIP-Group1/DIP-Project/blob/master/Reports/group1_poster.png)
-<video src='https://github.com/DIP-Group1/DIP-Project/blob/master/Reports/group1_video.mp4' width=180/>
+
+
+https://user-images.githubusercontent.com/96687844/163227874-33bc2138-02a1-4b8e-9332-5bb8d38906f3.mp4
+
+
 
 ### Table of Contents
 some links
@@ -15,6 +19,7 @@ some links
 
 
 ### Requirements
+
 TBD
 ***
 
