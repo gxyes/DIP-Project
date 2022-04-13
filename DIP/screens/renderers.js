@@ -44,7 +44,7 @@ class ImgAvatar7 extends PureComponent {
 class ImgAvatar1 extends PureComponent {
   render() {
     return(
-      <View style={[styles.ImgAvatar7, { left: global.left, top: global.top}]}>
+      <View style={[styles.ImgAvatar7, { left: global.left_2, top: global.top_2}]}>
           <Image
                   style={{width: 64, height: 64}}
                   source={require('../assets/avatar1.gif')} />

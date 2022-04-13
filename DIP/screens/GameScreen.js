@@ -64,6 +64,59 @@ export default class BestGameEver extends PureComponent {
     console.log("progress: " + global.progress);
     console.log("count: " + global.count);
   }
+  
+  updatePostion2 = () => {
+    if(global.count_2 <= global.progress/10){
+      switch(global.count_2){
+        case 9: //update the position of avatar according to accordinates
+          global.top_2 = 240; 
+          global.left_2 = 120;
+          break;
+        case 8:
+          global.top_2 = 290; 
+          global.left_2 = 90;
+          break;
+        case 7:
+          global.top_2 = 340;
+          global.left_2 = 40;
+          break;
+        case 6: //update the position of avatar according to accordinates
+          global.top_2 = 380; 
+          global.left_2 = 20;
+          break;
+        case 5:
+          global.top_2 = 440; 
+          global.left_2 = 80;
+          break;
+        case 4:
+          global.top_2 = 470;
+          global.left_2 = 160;
+          break;
+        case 3: //update the position of avatar according to accordinates
+          global.top_2 = 490; 
+          global.left_2 = 220;
+          break;
+        case 2:
+          global.top_2 = 530; 
+          global.left_2 = 290;
+          break;
+        case 1:
+          global.top_2 = 570;
+          global.left_2 = 270;
+          break;
+        case 0:
+          global.top_2 = 610;
+          global.left_2 = 230;
+          break;
+      }
+      global.count_2++;
+    }
+
+    console.log("top:" + global.top_2);
+    console.log("left:" + global.left_2);
+    console.log("progress: " + global.progress);
+    console.log("count: " + global.count_2);
+  }
 
   render() {
     return (      
@@ -84,8 +137,12 @@ export default class BestGameEver extends PureComponent {
           <StatusBar hidden={false} barStyle="dark-content"/>
 
           <Button
-            title="Press me"
+            title="Update Avatar 1"
             onPress={this.updatePostion1}
+          />
+          <Button
+            title="Update Avatar 2"
+            onPress={this.updatePostion2}
           />
         </ImageBackground>
       </View>
