@@ -6,6 +6,7 @@ By IEM AY2021/2022 DIP Group 1
 ### Group Info
 some links
 ***
+![image](https://github.com/DIP-Group1/DIP-Project/blob/master/Reports/group1_poster.png)
 
 ### Table of Contents
 some links
@@ -17,8 +18,7 @@ TBD
 ***
 
 ### Clone to Local
-After you clone the repository, please run **yarn install** first for installing all necessary libraries
-If you are missing some packages, please refer to the following **3rd Party Library List** for further installation
+After you clone the repository, please run **yarn install** first for installing all necessary libraries. If you are missing some packages, please refer to the following **3rd Party Library List** for further installation
 | Name             | Link                                                 | Used in (Components/Pages/...)                            | Installation                                                                                         |
 | ---------------- | ---------------------------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | NativeBase       | https://nativebase.io/                               | EventCard.js, TaskCard.js, DeadlineCard.js                | yarn add native-base<br>expo install react-native-svg<br>expo install react-native-safe-area-context |
