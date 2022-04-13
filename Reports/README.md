@@ -1,4 +1,6 @@
 This folder contains:
+| Group Doc                  | File Name|
+|-----------------------|-------|
 | presentation slides | group1_presentation.pptx |
 | Our group report | group1_report.docx |
 | Our project poster | group1_poster.pdf |
