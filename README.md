@@ -23,9 +23,9 @@ https://user-images.githubusercontent.com/96687844/163228126-4aec176a-77e6-40ca-
 
 
 ### Requirements
-expo version 5.3.0
-npm version 6.14.8
-yarn version 1.22.10
+expo version 5.3.0  
+npm version 6.14.8  
+yarn version 1.22.10  
 
 ***
 
@@ -36,8 +36,8 @@ After you clone the repository, please run **yarn install** first for installing
 | NativeBase       | https://nativebase.io/                               | EventCard.js, TaskCard.js, DeadlineCard.js                | yarn add native-base<br>expo install react-native-svg<br>expo install react-native-safe-area-context |
 | Streamline       | https://app.streamlinehq.com/icons/streamline-colors |                                                           |
 | Firebase         | https://firebase.google.com/                         | Database                                                  | npm install firebase                                                                                 |
-| ImagePicker      |                                                      | ProfilePage                                               | npm install expo-image-picker                                                                        |
-| Chart            |                                                      | ProfilePage                                               | npm install react-native-chart-kit                                                                   |
+| ImagePicker      | https://docs.expo.dev/versions/latest/sdk/imagepicker/ | ProfilePage                     | npm install expo-image-picker                                                                        |
+| Chart            | https://www.npmjs.com/package/react-native-chart-kit                 | ProfilePage       | npm install react-native-chart-kit                                                                   |
 | React Navigation | https://reactnavigation.org/docs/stack-navigator     | AddComponents.js, AddEvent.js, AddDeadline.js, AddTask.js | npm install @react-navigation/native @react-navigation/stack                                         |
 | Modalbox         | https://www.npmjs.com/package/react-native-modalbox  | AddEvent.js, AddDeadline.js, AddTask.js                   | npm install react-native-modalbox                                                                    |
 | ConfettiCannon         | https://www.npmjs.com/package/react-native-confetti-cannon  | GameScreen.js |yarn add react-native-confetti-cannon |
