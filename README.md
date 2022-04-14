@@ -9,12 +9,8 @@ some links
 
 ### Group Info
  Group Leader: Guo Xinying  
- Group Member: Goh Jessie  
-               Gwenn Tan Yiru  
-               Marcus Leong Yu Zhen  
-               Michael Cahyadi Tjondro Kusumo  
-               Tan Jichen  
-               Wang Xinyu  
+ Group Member: Goh Jessie, Gwenn Tan Yiru, Marcus Leong Yu Zhen, Michael Cahyadi Tjondro Kusumo, Tan Jichen, Wang Xinyu   
+               
 ***
 ### Introduction to our mobile app and methodologies
 ![image](https://github.com/DIP-Group1/DIP-Project/blob/master/Reports/group1_poster.png)
