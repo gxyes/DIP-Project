@@ -3,24 +3,34 @@
 By IEM AY2021/2022 DIP Group 1
 ***
 
-### Group Info
+### Table of Contents
 some links
+***
+
+### Group Info
+ Group Leader: Guo Xinying
+ Group Member: Goh Jessie
+               Gwenn Tan Yiru
+               Marcus Leong Yu Zhen
+               Michael Cahyadi Tjondro Kusumo
+               Tan Jichen
+               Wang Xinyu
 ***
 ### Introduction to our mobile app and methodologies
 ![image](https://github.com/DIP-Group1/DIP-Project/blob/master/Reports/group1_poster.png)
 
 
-
 https://user-images.githubusercontent.com/96687844/163228126-4aec176a-77e6-40ca-95d2-a4b530ef9098.mp4
 
 
-### Table of Contents
-some links
-***
+
 
 
 ### Requirements
-TBD
+expo version 5.3.0
+npm version 6.14.8
+yarn version 1.22.10
+
 ***
 
 ### Clone to Local
