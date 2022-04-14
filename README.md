@@ -6,6 +6,7 @@ By IEM AY2021/2022 DIP Group 1
 ### Group Info
 some links
 ***
+### Introduction to our mobile app and methodologies
 ![image](https://github.com/DIP-Group1/DIP-Project/blob/master/Reports/group1_poster.png)
 
 
