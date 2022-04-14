@@ -1,4 +1,4 @@
-# DIP-Project
+# DIP-Project （Development of a Focus App 📅）
 
 By IEM AY2021/2022 DIP Group 1
 ***
