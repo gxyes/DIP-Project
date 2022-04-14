@@ -10,7 +10,6 @@ By IEM AY2021/2022 DIP Group 1
 [4. Clone Insturctions](#Clone-to-local)  
 
 
-some links
 ***
 
 ### Group Info
