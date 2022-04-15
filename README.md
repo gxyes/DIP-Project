@@ -31,10 +31,6 @@ https://user-images.githubusercontent.com/96687844/163228126-4aec176a-77e6-40ca-
 1. expo version 5.3.0  
 2. npm version 6.14.8  
 3. yarn version 1.22.10  
-
-=======
-
-TBD
 ***
 
 ### Clone to local
