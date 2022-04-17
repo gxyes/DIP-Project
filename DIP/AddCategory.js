@@ -116,8 +116,8 @@ const AddCategory = () => {
                 <NavigationContainer independent={true}>
                     <Text>
                         Name: {category.Name},
-                        Additional Info: {category.AddInfo},
-                        color: {category.color}
+                        Additional Info: {category.AddInfo}
+                        {/* color: {category.color} */}
                       {/* categortID: {category.categoryID}, */}
                     </Text>
 

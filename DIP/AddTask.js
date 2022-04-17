@@ -6,13 +6,13 @@ import { TouchableOpacity, SafeAreaView, ScrollView, StyleSheet, TextInput, Text
 import { createStackNavigator } from "@react-navigation/stack";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from "react-native-modalbox";
-import { NavigationContainer } from '@react-navigation/native';
+import { CurrentRenderContext, NavigationContainer } from '@react-navigation/native';
 import { useNavigation } from "@react-navigation/native";
 
 //Required imports for database
 import {useEffect} from "react";
 import {db} from './firebase_config';
-import {collection, getDocs, addDoc, doc, deleteDoc, updateDoc} from 'firebase/firestore';
+import {collection, getDocs, addDoc, doc, deleteDoc, updateDoc, setDoc, query} from 'firebase/firestore';
 
 // ignore warning for constantly refreshing view
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
@@ -25,6 +25,7 @@ const AddTask = () => {
   const [newCategory, setNewCategory] = useState("");
   const [newReminder, setNewReminder] = useState("");
   const [completedStatus, setCompletedStatus] = useState(false);
+  const [initialCount, setInitialCount] = useState();
 
   // navigation const
   const navigation = useNavigation();
@@ -168,16 +169,51 @@ const AddTask = () => {
       await deleteDoc(taskDoc);
   };
 
+  
+  const [count, setCompletedCount] = useState([]);
+  // const [newCount, setNewCount] = useState();
+  const countCollectionRef = collection(db, "Count");
+  // const countCollectionRef = db.collection('Count').doc('countDocID');
+
+
   const updateTaskCheck = async (id, completed) => {
     const completedDoc = doc(db, "Task", id);
     const newFields = {completed: true};
     await updateDoc(completedDoc, newFields);
+  
+    const q = query(countCollectionRef);
+    const data = await getDocs(q);
+
+    data.forEach((doc) => {
+      setInitialCount(doc.data())
+      console.log(doc.id, ' => ', doc.data());
+    });
+
+    const countDoc = doc(db, "Count", "countDocID");
+    const countDecrement = {totalCount: initialCount.totalCount - 1};
+    console.log(countDecrement);
+    await updateDoc(countDoc, countDecrement);
+
   };
 
   const updateTaskUncheck = async (id, completed) => {
     const completedDoc = doc(db, "Task", id);
     const newFields = {completed: false};
     await updateDoc(completedDoc, newFields);
+
+    // decrement
+    const q = query(countCollectionRef);
+    const data = await getDocs(q);
+
+    data.forEach((doc) => {
+      setInitialCount(doc.data())
+      // console.log(doc.id, ' => ', doc.data());
+    });
+
+    const countDoc = doc(db, "Count", "countDocID");
+    const countIncrement = {totalCount: initialCount.totalCount + 1};
+    await updateDoc(countDoc, countIncrement);
+
   };
 
   useEffect(() => {
@@ -190,8 +226,15 @@ const AddTask = () => {
       const data = await getDocs(categoryCollectionRef);
       setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
+
+    const getCompletedCount = async () => {
+      const data = await getDocs(countCollectionRef);
+      setCompletedCount(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+
       getTasks();
       getCategories();
+      getCompletedCount();
       console.log(getTasks);
   },[]);
 
@@ -291,31 +334,40 @@ const AddTask = () => {
 
         {tasks.map((task) => {
           return (
-            <NavigationContainer independent={true}>
-                <Text style={task.completed == true ? styles.strikethrough : null}>
+            // <NavigationContainer independent={true}>
+            <View style={{flex:1, margin: 12}}>
+            <SafeAreaView>
+            <ScrollView style={styles.ScrollView}>
+                <Text style={task.completed == true ? styles.greyedout : null}>
                     {/* taskID: {task.taskID}, */}
-                    Name: {task.Name},
-                    Location: {task.Location},
-                    Category: {task.Category},
-                    Reminder: {task.Reminder},
-                    Remarks: {task.Remarks},
-                    Date: {task.date}, {/* date must be small letter not Date!*/}
+                    Name: {task.Name}, {"\n"}
+                    Location: {task.Location}, {"\n"}
+                    Category: {task.Category}, {"\n"}
+                    Reminder: {task.Reminder},{"\n"}
+                    Remarks: {task.Remarks},{"\n"}
+                    Date: {task.date}, {"\n"}{/* date must be small letter not Date!*/}
                     completed: {task.completed}
                 </Text>
 
-                <Button
+                <TouchableOpacity style={task.completed == false ? styles.CheckButton : styles.UnCheckButton}
                 onPress={() => {task.completed == false ? updateTaskCheck(task.id, task.completed) 
                   : updateTaskUncheck(task.id, task.completed)}}
-                  title = {task.completed == false ? "Check" : "Uncheck"}
+                  // title = {task.completed == false ? "Check" : "Uncheck"}
+
                 >
-                </Button>
+                  <Text style={task.completed == false ? styles.CheckButtonText : styles.UnCheckButtonText}>{task.completed == false ? "CHECK" : "UNCHECK"}</Text>
+                </TouchableOpacity>
                 
                 <Button
                 onPress={() => deleteTask(task.id)}
                 title= "Delete Task"
                 >
+                  {/* <Text styles={styles.deleteButtonText}>Delete Task</Text> */}
                 </Button>
-            </NavigationContainer>
+            {/* </NavigationContainer> */}
+            </ScrollView>
+            </SafeAreaView>
+            </View>
           );
         })}
 
@@ -494,9 +546,44 @@ const styles = StyleSheet.create({
   posttext:{
     textAlign:'center',
   },
-  strikethrough: {
+  greyedout: {
     textDecorationLine: 'line-through',
-  }
+    color: '#808080',
+  },
+  CheckButton: {
+    // backgroundColor: '#24a0ed',
+    // borderColor: '#24a0ed',
+    // borderWidth: 1,
+  },
+  CheckButtonText: {
+    color: '#24a0ed',
+    textAlign: 'center',
+    fontSize: 15,
+    paddingTop: 7,
+    paddingBottom: 7,
+    // fontWeight: 'bold',
+  },
+  UnCheckButton: {
+    // borderColor: '#808080',
+    // borderWidth: 1,
+  },
+  UnCheckButtonText: {
+    color: '#808080',
+    textAlign: 'center',
+    fontSize: 15,
+    paddingTop: 7,
+    paddingBottom: 7,
+  },
+  deleteButton: {
+    backgroundColor: '#24a0ed',
+  },
+  deleteButtonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 15,
+    paddingTop: 7,
+    paddingBottom: 7,
+  },
 });
 
 export default AddTask;
