@@ -18,7 +18,7 @@ By IEM AY2021/2022 DIP Group 1
                
 ***
 ### Introduction of Focus mobile app and methodologies
-![image](https://github.com/DIP-Group1/DIP-Project/blob/master/Reports/group1_poster.png)
+![image](https://github.com/DIP-Group1/DIP-Project/blob/master/Reports/group1_publicity_poster.png)
 
 
 https://user-images.githubusercontent.com/96687844/163228126-4aec176a-77e6-40ca-95d2-a4b530ef9098.mp4
