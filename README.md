@@ -7,7 +7,7 @@ By IEM AY2021/2022 DIP Group 1
 [1. Group Info](#Group-Info)  
 [2. Project Introduction](#Introduction-of-Focus-mobile-app-and-methodologies)  
 [3. Requirements](#Requirements)  
-[4. Clone Insturctions](#Clone-to-local)  
+[4. Clone Instructions](#Clone-to-local)  
 
 
 ***
